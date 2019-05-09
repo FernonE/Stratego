@@ -3,6 +3,9 @@ package nl.koffiepot.Stratego.model;
 import java.util.Scanner;
 
 public class Speler {
+
+    //fields
+
     private long id;
     private String spelerNaam;
     private int spelerWins;
@@ -13,6 +16,9 @@ public class Speler {
     private int[] selectCoords = {0,0}; //deze wordt aangepast
 
 
+
+    //methods
+
     private int[] selectPiece(){
         /*
         -vragen om user input
@@ -21,7 +27,7 @@ public class Speler {
             -als het goed is, return int[]{x,y}
             -als het niet goed is, return int[]{-1,-1}
          */
-        System.out.println("Welke speelstuk wil je bewegen? Voer coordinaten in als volgt: x,y");
+        System.out.println("Welk speelstuk wil je bewegen? Voer coordinaten in als volgt: x,y");
         String answer = scanner.nextLine();
         int ind = answer.indexOf(',');
         String first = answer.substring(0,ind);
@@ -36,13 +42,14 @@ public class Speler {
         }
         return coords;
     }
-    /*
-    random comment
-     */
+
+
+
+
     public void beurt(Bord bord) {
 
         //in een do while not correct loop zetten
-        boolean passed = false;
+        boolean passed;
         do{
             passed = true; // eerst maar eens even de check op true zetten.
             selectCoords = this.selectPiece(); //Vraag om user input om te bepalen welke speelstuk hij/zij wil verzetten. {-1,-1} als het niet goed is, {x, y} als het wel goed is
@@ -71,10 +78,15 @@ public class Speler {
     }
 
 
+    //constructor
+
+
     public Speler(String spelerNaam,int spelerTeam) {
         this.spelerNaam = spelerNaam;
         this.spelerTeam = spelerTeam;
     }
+
+    //getters & setters
 
     public long getId() {
         return id;

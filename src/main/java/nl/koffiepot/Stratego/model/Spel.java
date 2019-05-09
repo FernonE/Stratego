@@ -9,7 +9,7 @@ public class Spel {
     private String name;
 
     public static void main(String[] args) {
-        //RICK: dit heb ik even gedaan om de bord constructor en de toString te testen in Bord.
+
 
 
         Scanner scanner = new Scanner(System.in);
@@ -23,12 +23,37 @@ public class Spel {
 
         Bord spelerBord = new Bord();
 
-        spelerBord.bordPrinten();
+        //spelerBord.bordPrinten();
         spelerBord.bordPrinten(0);
 
         speler1.beurt(spelerBord);
         spelerBord.bordPrinten(0);
+
+        speler1.beurt(spelerBord);
+        spelerBord.bordPrinten(0);
+
+        spelerBord.bordPrinten();
+
+        speler1.beurt(spelerBord);
+        spelerBord.bordPrinten(0);
+
+
+        speler1.beurt(spelerBord);
+        spelerBord.bordPrinten(0);
+
+        speler1.beurt(spelerBord);
+        spelerBord.bordPrinten(0);
+
+
+
+
+
+
+
+
+
     }
+
 
 
 
