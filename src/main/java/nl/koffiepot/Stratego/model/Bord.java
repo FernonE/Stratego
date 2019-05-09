@@ -46,6 +46,7 @@ public class Bord {
 
 
 
+
     //Methode voor het maken van 40 speelstukken
     public List<Speelstuk> createteam(int team) {
         List<Speelstuk> Teamstukken = new ArrayList<>();
@@ -105,6 +106,10 @@ public class Bord {
         //    System.out.println("Dit kan nog niet, hier staat een ander speelstuk");
         //    return false;
         //}
+        else if(speelBord[pionYLocation][pionXLocation] instanceof Vlag){ //check voor de vlag ingebouwd, maar ook hier geld, vlag van zowel beide teams (nog team specifiek maken)
+            System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!");
+            return false;
+        }
         else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
             System.out.println("Hier kun je niet doorheen!");
             return false;
@@ -119,7 +124,7 @@ public class Bord {
 
     //Deze code verplaatst de stukken, maar kan alleen aangeroepen worden nadat de movement check is uitgevoerd
     //Daarom is deze ook private!
-    //kijkt eerst of de nieuwe locatie een speelstuk bevat, zo ja, vergelijkt die de values met elkaar
+    //kijkt eerst of de nieuwe locatie een speelstuk bevat, zo ja, vergelijkt die de values met elkaar MOET NOG TEAM SPECIFIEK MAKEN, NU KAN JE OOK JE EIGEN SPEELSTUK AANVALLEN
     private void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld) {
 
         if (speelBord[pionYLocationNew][pionXLocationNew] instanceof Speelstuk) {
