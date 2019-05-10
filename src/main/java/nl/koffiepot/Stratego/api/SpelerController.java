@@ -38,4 +38,5 @@ public class SpelerController {
     public void deleteBySpelerNaam(@PathVariable String naam) {
         spelerService.deleteBySpelerNaam(naam);
     }
+
 }

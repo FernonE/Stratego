@@ -2,6 +2,7 @@ package nl.koffiepot.Stratego.api;
 
 import nl.koffiepot.Stratego.model.Bord;
 import nl.koffiepot.Stratego.model.Speler;
+import nl.koffiepot.Stratego.model.data.BordData;
 import nl.koffiepot.Stratego.model.data.SpelerData;
 import nl.koffiepot.Stratego.service.SpelerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class SpelController {
         return spelerService.findAll();
     }
 
+
     @GetMapping("/{tempSpelerNaam1}/{tempSpelerNaam2}")
     public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2){
 
@@ -28,12 +30,23 @@ public class SpelController {
         System.out.println(speler1);
         System.out.println(speler2);
 
-        Bord spelerBord = new Bord();
+        BordData bordData = new BordData();
 
-        spelerBord.bordPrinten();
-        spelerBord.bordPrinten(0);
+        spelerService.saveBord(bordData);
+        Bord.bordPrinten(bordData);
+        Bord.bordPrinten(0,bordData);
+        speler1.beurt(bordData);
+        Bord.bordPrinten(0,bordData);
+        spelerService.saveBord(bordData);
+    }
 
-        speler1.beurt(spelerBord);
-        spelerBord.bordPrinten(0);
+    @GetMapping("bord")
+    public Iterable<BordData> getBordData(){
+        return spelerService.findAllBord();
+    }
+
+    @GetMapping("/deletebord")
+    public void deleteAllBord(){
+        spelerService.deleteAllBord(spelerService.findAllBord());
     }
 }

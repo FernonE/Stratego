@@ -1,5 +1,7 @@
 package nl.koffiepot.Stratego.model;
 
+import nl.koffiepot.Stratego.model.data.BordData;
+
 import java.util.Scanner;
 
 public class Speler {
@@ -44,7 +46,7 @@ public class Speler {
     /*
     random comment
      */
-    public void beurt(Bord bord) {
+    public void beurt(BordData bordData) {
 
         //in een do while not correct loop zetten
         boolean passed = false;
@@ -56,7 +58,7 @@ public class Speler {
                 passed = false;
                 continue; //als het misgaat, springt java vanaf hier meteen naar de while(!passed) en slaat de volgende check dus over. Aangezien dat niet gaat :)
             }
-            if(!bord.checkValidPiece(selectCoords[1],selectCoords[0],this.spelerTeam)){ //daarna kijken of het wel een correcte speelstuk is
+            if(!Bord.checkValidPiece(selectCoords[1],selectCoords[0],this.spelerTeam,bordData)){ //daarna kijken of het wel een correcte speelstuk is
                 //prints wanneer iets verkeerd gekozen is gebeurt al in bord.
                 passed = false;
             }
@@ -69,7 +71,7 @@ public class Speler {
             System.out.println("selecteer uit up(u), down(d), left(l) of right(r)");
             //bord.moveChooser vraag al om user input welke richting je op wilt, als dit mogelijk is gebeurt dit ook meteen
             //is de move ook uitgevoerd, dan komt true eruit, en anders false
-            if (bord.moveChooser(selectCoords[1],selectCoords[0],this)){ //in bord.moveChooser, wordt al gevraagd voor user input in welke richting je wilt bewegen, en wordt dit gedaan waneer het kan.
+            if (Bord.moveChooser(selectCoords[1],selectCoords[0],bordData)){ //in bord.moveChooser, wordt al gevraagd voor user input in welke richting je wilt bewegen, en wordt dit gedaan waneer het kan.
                 passed = true;
             }
         } while (!passed);
@@ -89,5 +91,13 @@ public class Speler {
 
     public void setGewonnen(boolean gewonnen) {
         this.gewonnen = gewonnen;
+    }
+
+    @Override
+    public String toString() {
+        return "Speler{" +
+                "spelerNaam='" + spelerNaam + '\'' +
+                ", spelerTeam=" + spelerTeam +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package nl.koffiepot.Stratego.model;
 
 import nl.koffiepot.Stratego.model.Speelstukken.*;
+import nl.koffiepot.Stratego.model.data.BordData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,67 +10,14 @@ import java.util.Scanner;
 
 public class Bord {
 
-    //variables
-    private long id;
-    private String naam = "default";
-    Object[][] speelBord = new Object[10][10];
-    private Blokkade blokkade = new Blokkade();
+
+    static private Blokkade blokkade = new Blokkade();
 
 
-    //Constructor(s), de default constructor
-    public Bord() {
-        List<Speelstuk> team1 = this.createteam(0); //De tijdelijk functie om een team aan te maken aante roepen
-        List<Speelstuk> team2 = this.createteam(1); //
-        Random rand = new Random();
-        for (int y = 0; y < 4; y++) { //het bord vullen
-            for (int x = 0; x < 10; x++) {
-                int ind = rand.nextInt(team1.size());
-                speelBord[y][x] = team1.get(ind);
-                team1.remove(ind);
 
-                ind = rand.nextInt(team2.size()); //dit kan gelijk voor team 2, de x coordinaat wordt alleen met 6 verhoogd.
-                speelBord[y + 6][x] = team2.get(ind);
-                team2.remove(ind);
-            }
-        }
-        //hardcoded blokkades
-        speelBord[4][2] = blokkade; //coordinaten 5,3
-        speelBord[4][3] = blokkade; //coordinaten 5,4
-        speelBord[5][2] = blokkade;
-        speelBord[5][3] = blokkade;
-        speelBord[4][6] = blokkade;
-        speelBord[4][7] = blokkade;
-        speelBord[5][6] = blokkade;
-        speelBord[5][7] = blokkade;
-    }
-
-
-    //Methode voor het maken van 40 speelstukken
-    public List<Speelstuk> createteam(int team) {
-        List<Speelstuk> Teamstukken = new ArrayList<>();
-        //Elk stuk krijgt een apart object en daarom worden 40 stukken gemaakt hieronder. Deze krijgen allemaal
-        //het teamnummer mee zodat er onderscheid gemaakt kan worden.
-        for (int i = 0; i < 6; i++) Teamstukken.add(new Bom(team));
-        Teamstukken.add(new Maarschalk(team));
-        Teamstukken.add(new Generaal(team));
-        for (int i = 0; i < 2; i++) Teamstukken.add(new Kolonel(team));
-        for (int i = 0; i < 3; i++) Teamstukken.add(new Majoor(team));
-        for (int i = 0; i < 4; i++) Teamstukken.add(new Kapitein(team));
-        for (int i = 0; i < 4; i++) Teamstukken.add(new Luitenant(team));
-        for (int i = 0; i < 4; i++) Teamstukken.add(new Sergeant(team));
-        for (int i = 0; i < 5; i++) Teamstukken.add(new Mineur(team));
-        for (int i = 0; i < 8; i++) Teamstukken.add(new Verkenner(team));
-        Teamstukken.add(new Spion(team));
-        Teamstukken.add(new Vlag(team));
-        return Teamstukken;
-    }
-
-    //method for asking pion (int y, int x)
-        // calls method if pion is own team
-        // calls method if pion can move in any direction
-
-    boolean checkValidPiece(int pionYlocation, int pionXLocation, int team){
-        Object gekozenStuk = speelBord[pionYlocation][pionXLocation];
+    static boolean checkValidPiece(int pionYlocation, int pionXLocation, int team, BordData bordData){
+        bordData.getSpeelBord();
+        Object gekozenStuk = bordData.getSpeelBord()[pionYlocation][pionXLocation];
         if(gekozenStuk == blokkade){
             System.out.println("Je hebt een blokkade gekozen");
             return false;
@@ -89,17 +37,17 @@ public class Bord {
 
 
 
-    private boolean movementCheck (int pionYLocation, int pionXLocation) {
+    private static boolean movementCheck (int pionYLocation, int pionXLocation, BordData bordData) {
         //Check of de nieuwe plaats wel op het bord ligt
         if (pionYLocation < 0 || pionYLocation > 10 || pionXLocation < 0 || pionXLocation > 10) {
             System.out.println("Deze locatie zit buiten het bord");
             return false;
         }
         //Check of de nieuwe plaats wel beschikbaar is om heen te gaan
-        else if (speelBord[pionYLocation][pionXLocation] instanceof Speelstuk) {
+        else if (bordData.getSpeelBord()[pionYLocation][pionXLocation] instanceof Speelstuk) {
             System.out.println("Dit kan nog niet, hier staat een andere Speelstuk");
             return false;
-        } else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
+        } else if (bordData.getSpeelBord()[pionYLocation][pionXLocation] instanceof Blokkade) {
             System.out.println("Hier kun je niet doorheen!");
             return false;
         } else {
@@ -110,14 +58,14 @@ public class Bord {
 
     //Deze code verplaatst de stukken, maar kan alleen aangeroepen worden nadat de movement check is uitgevoerd
     //Daarom is deze ook private!
-    private void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld){
+    private static void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld, BordData bordData){
         //Sla het speelstuk op de nieuwe plaats op
-        speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+        bordData.getSpeelBord()[pionYLocationNew][pionXLocationNew] = bordData.getSpeelBord()[pionYLocationOld][pionXLocationOld];
         //Gooi de oude weg
-        speelBord[pionYLocationOld][pionXLocationOld] = null;
+        bordData.getSpeelBord()[pionYLocationOld][pionXLocationOld] = null;
     }
 
-    public boolean moveChooser(int pionYLocation, int pionXLocation, Speler speler) {
+    public static boolean moveChooser(int pionYLocation, int pionXLocation, BordData bordData) {
         Scanner scanner = new Scanner(System.in);
         String movementDirection = scanner.next();
 
@@ -125,29 +73,29 @@ public class Bord {
         switch (movementDirection) {
             case "u":
                 //Check of hij wel in deze richting kan bewegen, zo ja: voer move uit, zo nee: nieuwe input vragen
-                if (movementCheck(pionYLocation - 1,pionXLocation)){
-                    movePiece(pionYLocation - 1,pionXLocation,pionYLocation,pionXLocation);
+                if (movementCheck(pionYLocation - 1,pionXLocation, bordData)){
+                    movePiece(pionYLocation - 1,pionXLocation,pionYLocation,pionXLocation, bordData);
                     return true;
                 } else {
                     return false;
                 }
             case "d":
-                if (movementCheck(pionYLocation + 1,pionXLocation)){
-                    movePiece(pionYLocation + 1,pionXLocation,pionYLocation,pionXLocation);
+                if (movementCheck(pionYLocation + 1,pionXLocation, bordData)){
+                    movePiece(pionYLocation + 1,pionXLocation,pionYLocation,pionXLocation, bordData);
                     return true;
                 } else {
                     return false;
                 }
             case "r":
-                if (movementCheck(pionYLocation,pionXLocation + 1)){
-                    movePiece(pionYLocation,pionXLocation + 1,pionYLocation,pionXLocation);
+                if (movementCheck(pionYLocation,pionXLocation + 1, bordData)){
+                    movePiece(pionYLocation,pionXLocation + 1,pionYLocation,pionXLocation, bordData);
                     return true;
                 } else {
                     return false;
                 }
             case "l":
-                if (movementCheck(pionYLocation,pionXLocation - 1)){
-                    movePiece(pionYLocation,pionXLocation - 1,pionYLocation,pionXLocation);
+                if (movementCheck(pionYLocation,pionXLocation - 1, bordData)){
+                    movePiece(pionYLocation,pionXLocation - 1,pionYLocation,pionXLocation, bordData);
                     return true;
                 } else{
                     return false;
@@ -164,7 +112,7 @@ public class Bord {
 
     //hieronder wordt het hele bord geprint, zie volgende methode voor team specifiek bord printen
 
-    public void bordPrinten(){
+    public static void bordPrinten(BordData bordData){
         StringBuilder bordstring = new StringBuilder();
         bordstring.append("X: | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10 | \n"); //deze coordinaten worden geprint boven het bord
         bordstring.append("   -----------------------------------------\n"); // dit is een afscheiding van coordinaten tov gevulde matrix
@@ -177,20 +125,20 @@ public class Bord {
                     bordstring.append(yCoordinaat + " ");
                     for (int x = 0; x < 10; x++) { //deze forloop voegt voor ieder vakje de value van het spelstuk toe of een "o" als het vakje leeg is.
                     String spelstukString;
-                    if (speelBord[y][x] instanceof Speelstuk) {
-                        Speelstuk speelstuk = (Speelstuk) speelBord[y][x];
+                    if (bordData.getSpeelBord()[y][x] instanceof Speelstuk) {
+                        Speelstuk speelstuk = (Speelstuk) bordData.getSpeelBord()[y][x];
                         if (speelstuk.getValue() < 10) {
                                 spelstukString = "| " + speelstuk.getValue() + " "; //een extra spatie toevoegen als de waarde kleiner is dan tien, zodat de uitlijning mooi klopt.
                             } else {
                                 spelstukString = "|" + speelstuk.getValue() + " ";
                             }
 
-                    } else if (speelBord[y][x] instanceof Blokkade) { //Als er een String wordt gevonden dan is het een blokkade
+                    } else if (bordData.getSpeelBord()[y][x] instanceof Blokkade) { //Als er een String wordt gevonden dan is het een blokkade
                         spelstukString = "| x ";
                     } else { //Leeg stuk ruimte waar heen gelopen kan worden
                         spelstukString = "|   ";
                     }
-                    bordstring.append(spelstukString); 
+                    bordstring.append(spelstukString);
                 }
                 bordstring.append("|\n");//Aan het einde komt nog een rechtstreepje en dan een niewline character
                 bordstring.append("   +---+---+---+---+---+---+---+---+---+---+\n");
@@ -203,7 +151,7 @@ public class Bord {
 
     //met onderstaande methode wordt het bord geprint teamspecifiek, je geeft dan het team mee in de methode
 
-    public void bordPrinten(int huidigeTeam){
+    public static void bordPrinten(int huidigeTeam, BordData bordData){
 
         StringBuilder bordstring = new StringBuilder();
         bordstring.append("X: | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10 | \n"); //deze coordinaten worden geprint boven het bord
@@ -217,8 +165,8 @@ public class Bord {
             bordstring.append(yCoordinaat + " ");
             for (int x = 0; x < 10; x++) { //deze forloop voegt voor ieder vakje de value van het spelstuk toe of een "o" als het vakje leeg is.
                 String spelstukString;
-                if (speelBord[y][x] instanceof Speelstuk) {
-                    Speelstuk speelstuk = (Speelstuk) speelBord[y][x];
+                if (bordData.getSpeelBord()[y][x] instanceof Speelstuk) {
+                    Speelstuk speelstuk = (Speelstuk) bordData.getSpeelBord()[y][x];
                     if (speelstuk.getTeam()==huidigeTeam){ //als team gelijk is aan huidigeteam --> print de values van speelstuk
                         if (speelstuk.getValue() < 10) {
                             spelstukString = "| " + speelstuk.getValue() + " "; //een extra spatie toevoegen als de waarde kleiner is dan tien, zodat de uitlijning mooi klopt.
@@ -228,7 +176,7 @@ public class Bord {
                     }else {
                         spelstukString = "|xxx"; //print xx voor speelstuk van tegenstander (andere team)
                     }
-                } else if (speelBord[y][x] instanceof Blokkade) { //Als er een String wordt gevonden dan is het een blokkade
+                } else if (bordData.getSpeelBord()[y][x] instanceof Blokkade) { //Als er een String wordt gevonden dan is het een blokkade
                     spelstukString = "| x ";
                 } else { //Leeg stuk ruimte waar heen gelopen kan worden
                     spelstukString = "|   ";
@@ -240,32 +188,9 @@ public class Bord {
         }
         System.out.println(bordstring);
     }
-
-
-    //getters and setter
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNaam() {
-        return naam;
-    }
-
-    public void setNaam(String naam) {
-        this.naam = naam;
-    }
-
-    public Object[][] getSpeelBord() {
-        return speelBord;
-    }
 }
 
 
 
-class Blokkade{}
 
 

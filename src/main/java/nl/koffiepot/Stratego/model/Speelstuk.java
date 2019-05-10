@@ -1,7 +1,11 @@
 package nl.koffiepot.Stratego.model;
 
-public class Speelstuk {
-    long id;
+import nl.koffiepot.Stratego.model.data.SpeelVlak;
+
+import java.io.Serializable;
+
+public class Speelstuk extends SpeelVlak {
+
     private int value;
     private String naam;
     private int team;
@@ -26,15 +30,6 @@ public class Speelstuk {
         }
     }
 
-
-    //Methodes voor het aanmaken
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public int getValue() {
         return value;
