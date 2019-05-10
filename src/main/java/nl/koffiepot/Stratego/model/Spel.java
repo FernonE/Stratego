@@ -1,6 +1,7 @@
-
 package nl.koffiepot.Stratego.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Spel {
@@ -14,22 +15,40 @@ public class Spel {
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voer naam speler 1 in:");
-        Speler speler1 = new Speler(scanner.nextLine(),0);
+        Speler speler1 = new Speler(scanner.nextLine(), 0);
         System.out.print("Voer naam speler 2 in:");
-        Speler speler2 = new Speler(scanner.nextLine(),1);
+        Speler speler2 = new Speler(scanner.nextLine(), 1);
 
+        //De spelers uitprinten
         System.out.println(speler1);
         System.out.println(speler2);
 
+        //de spelers in een lijst zetten
+        List<Speler> spelers = new ArrayList<>();
+        spelers.add(speler1);
+        spelers.add(speler2);
+
         Bord spelerBord = new Bord();
+        int turn = 0;
+        boolean gamerunning = true;
 
-        spelerBord.bordPrinten();
-        spelerBord.bordPrinten(0);
+        while (gamerunning) {
+            Speler huidigespeler = spelers.get(turn);
+            spelerBord.bordPrinten(huidigespeler.getSpelerTeam());
+            huidigespeler.beurt(spelerBord);
+            /*
+            if [einde spel] {
+                gamerunning = false
+            }
+             */
+            turn++;
+            if (turn == spelers.size()) {
+                turn = 0;
+            }
+        }
 
-        speler1.beurt(spelerBord);
-        spelerBord.bordPrinten(0);
+
     }
-
 
 
     public long getId() {

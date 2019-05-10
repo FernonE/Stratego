@@ -68,8 +68,8 @@ public class Bord {
         // calls method if pion is own team
         // calls method if pion can move in any direction
 
-    boolean checkValidPiece(int pionYlocation, int pionXLocation, int team){
-        Object gekozenStuk = speelBord[pionYlocation][pionXLocation];
+    boolean checkValidPiece(int pionYLocation, int pionXLocation, int team){
+        Object gekozenStuk = speelBord[pionYLocation][pionXLocation];
         if(gekozenStuk == blokkade){
             System.out.println("Je hebt een blokkade gekozen");
             return false;
@@ -81,8 +81,14 @@ public class Bord {
             if (gekozenSpeelStuk.getTeam() != team){
                 System.out.println("het gekozen speelstuk is niet van jouw team");
                 return false;
-            } else {
-                return true;
+            } else { //als het gekozen speelstuk eindelijk wel goed is, dan even kijken of er een beweegbare plek is (1 plek omheen die 'null' is)
+                if (speelBord[pionYLocation][pionXLocation+1] == null || speelBord[pionYLocation][pionXLocation-1] == null //deze check heeft een bug als een correcte speelstuk aan de rand is gekozen omdat hij dan buiten het bord check of de index 'null' is. Maar buiten het bord is er geen index dus krijg je een ArrayIndexOutOfboundsException.
+                        || speelBord[pionYLocation-1][pionXLocation] == null || speelBord[pionYLocation+1][pionXLocation] == null){
+                    return true;
+                } else {
+                    System.out.println("Je hebt een speelstuk gekozen dat niet bewogen kan worden");
+                    return false;
+                }
             }
         }
     }
