@@ -1,5 +1,7 @@
 package nl.koffiepot.Stratego.model.data;
 
+import nl.koffiepot.Stratego.model.Speler;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,7 @@ public class SpelerData {
     private String spelerNaam;
     private int spelerWins;
     private int spelerLosses;
+
 
 
     public SpelerData(){}
@@ -36,7 +39,6 @@ public class SpelerData {
         return spelerWins;
     }
 
-
     public void setSpelerWins(int spelerWins) {
         this.spelerWins = spelerWins;
     }
@@ -47,5 +49,14 @@ public class SpelerData {
 
     public void setSpelerLosses(int spelerLosses) {
         this.spelerLosses = spelerLosses;
+    }
+
+    @Override
+    public String toString() {
+        return "SpelerData{" +
+                "spelerNaam='" + spelerNaam + '\'' +
+                ", spelerWins=" + spelerWins +
+                ", spelerLosses=" + spelerLosses +
+                '}';
     }
 }

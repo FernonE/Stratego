@@ -3,11 +3,17 @@ package nl.koffiepot.Stratego.model;
 import java.util.Scanner;
 
 public class Speler {
+    private String spelerNaam;
     private int spelerTeam;
     private boolean gewonnen;
 
+    public Speler(String spelerNaam, int spelerTeam){
+        this.spelerNaam = spelerNaam;
+        this.spelerTeam = spelerTeam;
+    }
 
-    //Variabelen nodig voor de functies
+
+
     private Scanner scanner = new Scanner(System.in);
     private int[] selectCoords = {0,0}; //deze wordt aangepast
 
@@ -50,8 +56,7 @@ public class Speler {
                 passed = false;
                 continue; //als het misgaat, springt java vanaf hier meteen naar de while(!passed) en slaat de volgende check dus over. Aangezien dat niet gaat :)
             }
-//LET OP VOLGENDE STUK CODE HEB IK AANGEPAST ZODAT HET EVEN WERKT VOOR DATABASE!!!
-            if(!bord.checkValidPiece(selectCoords[1],selectCoords[0],1)){//this.spelerTeam)){ Dit heb ik kort aangepast om database werkende te krijgen //daarna kijken of het wel een correcte speelstuk is
+            if(!bord.checkValidPiece(selectCoords[1],selectCoords[0],this.spelerTeam)){ //daarna kijken of het wel een correcte speelstuk is
                 //prints wanneer iets verkeerd gekozen is gebeurt al in bord.
                 passed = false;
             }
