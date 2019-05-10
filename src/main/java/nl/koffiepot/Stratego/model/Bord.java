@@ -106,8 +106,8 @@ public class Bord {
         //    System.out.println("Dit kan nog niet, hier staat een ander speelstuk");
         //    return false;
         //}
-        else if(speelBord[pionYLocation][pionXLocation] instanceof Vlag){ //check voor de vlag ingebouwd, maar ook hier geld, vlag van zowel beide teams (nog team specifiek maken)
-            System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!");
+        else if(speelBord[pionYLocation][pionXLocation] instanceof Vlag){ //check voor de vlag ingebouwd, maar ook hier geldt, vlag van zowel beide teams (nog team specifiek maken)
+            System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!"); //en de game moet nog eindigen....
             return false;
         }
         else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
@@ -128,11 +128,15 @@ public class Bord {
     private void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld) {
 
         if (speelBord[pionYLocationNew][pionXLocationNew] instanceof Speelstuk) {
-            if (((Speelstuk) speelBord[pionYLocationOld][pionXLocationOld]).getValue() >= ((Speelstuk) speelBord[pionYLocationNew][pionXLocationNew]).getValue()) {
-                System.out.println("ATTACK!!!" + '\n' + "JE HEBT GEWONNEN!!!!");
+            Speelstuk enemy = (Speelstuk) speelBord[pionYLocationNew][pionXLocationNew];
+            Speelstuk eigenSpeelstuk = (Speelstuk) speelBord[pionYLocationOld][pionXLocationOld];
+            System.out.println("ATTACK!!!" + '\n' + "Je valt aan met " + eigenSpeelstuk.getNaam());
+
+            if (eigenSpeelstuk.getValue() >= enemy.getValue()) {
+                System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU WIN!");
                 speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
-            } else if (((Speelstuk) speelBord[pionYLocationOld][pionXLocationOld]).getValue() < ((Speelstuk) speelBord[pionYLocationNew][pionXLocationNew]).getValue()) {
-                System.out.println("ATTACK!!!" + '\n' + "HELAAS JE HEBT VERLOREN");
+            } else if (eigenSpeelstuk.getValue() < enemy.getValue()) {
+                System.out.println( "Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU LOST!");
             } else {
                 speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
             }
