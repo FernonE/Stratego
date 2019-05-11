@@ -2,6 +2,7 @@ package nl.koffiepot.Stratego.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Spel {
@@ -10,8 +11,7 @@ public class Spel {
     private String name;
 
     public static void main(String[] args) {
-        //RICK: dit heb ik even gedaan om de bord constructor en de toString te testen in Bord.
-
+        boolean Randomplacement = true; //op true zetten om willekeurig een bord te maken, dit is mss makkelijker met testen.
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voer naam speler 1 in:");
@@ -28,7 +28,15 @@ public class Spel {
         spelers.add(speler1);
         spelers.add(speler2);
 
-        Bord spelerBord = new Bord();
+        //Een nieuw bord aanmaken
+        Bord spelerBord = new Bord(Randomplacement);
+
+        if(!Randomplacement) {
+            speler1.zetTeam(spelerBord);
+            speler2.zetTeam(spelerBord);
+        }
+
+
         int turn = 0;
         boolean gamerunning = true;
 

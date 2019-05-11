@@ -17,19 +17,21 @@ public class Bord {
 
 
     //Constructor(s), de default constructor
-    public Bord() {
-        List<Speelstuk> team1 = this.createteam(0); //De tijdelijk functie om een team aan te maken aante roepen
-        List<Speelstuk> team2 = this.createteam(1); //
-        Random rand = new Random();
-        for (int y = 0; y < 4; y++) { //het bord vullen
-            for (int x = 0; x < 10; x++) {
-                int ind = rand.nextInt(team1.size());
-                speelBord[y][x] = team1.get(ind);
-                team1.remove(ind);
+    public Bord(boolean RandomPlacement) {
+        if (RandomPlacement) {
+            List<Speelstuk> team1 = this.createteam(0); //De tijdelijk functie om een team aan te maken aante roepen
+            List<Speelstuk> team2 = this.createteam(1); //
+            Random rand = new Random();
+            for (int y = 0; y < 4; y++) { //het bord vullen
+                for (int x = 0; x < 10; x++) {
+                    int ind = rand.nextInt(team1.size());
+                    speelBord[y][x] = team1.get(ind);
+                    team1.remove(ind);
 
-                ind = rand.nextInt(team2.size()); //dit kan gelijk voor team 2, de x coordinaat wordt alleen met 6 verhoogd.
-                speelBord[y + 6][x] = team2.get(ind);
-                team2.remove(ind);
+                    ind = rand.nextInt(team2.size()); //dit kan gelijk voor team 2, de x coordinaat wordt alleen met 6 verhoogd.
+                    speelBord[y + 6][x] = team2.get(ind);
+                    team2.remove(ind);
+                }
             }
         }
         //hardcoded blokkades
@@ -41,6 +43,10 @@ public class Bord {
         speelBord[4][7] = blokkade;
         speelBord[5][6] = blokkade;
         speelBord[5][7] = blokkade;
+    }
+
+    public void setPiece(int y, int x, Speelstuk speelstuk){
+        speelBord[y][x] = speelstuk;
     }
 
 
@@ -82,8 +88,12 @@ public class Bord {
                 System.out.println("het gekozen speelstuk is niet van jouw team");
                 return false;
             } else { //als het gekozen speelstuk eindelijk wel goed is, dan even kijken of er een beweegbare plek is (1 plek omheen die 'null' is)
-                if (speelBord[pionYLocation][pionXLocation+1] == null || speelBord[pionYLocation][pionXLocation-1] == null //deze check heeft een bug als een correcte speelstuk aan de rand is gekozen omdat hij dan buiten het bord check of de index 'null' is. Maar buiten het bord is er geen index dus krijg je een ArrayIndexOutOfboundsException.
-                        || speelBord[pionYLocation-1][pionXLocation] == null || speelBord[pionYLocation+1][pionXLocation] == null){
+                //if (speelBord[pionYLocation][pionXLocation+1] == null || speelBord[pionYLocation][pionXLocation-1] == null //deze check heeft een bug als een correcte speelstuk aan de rand is gekozen omdat hij dan buiten het bord check of de index 'null' is. Maar buiten het bord is er geen index dus krijg je een ArrayIndexOutOfboundsException.
+                //        || speelBord[pionYLocation-1][pionXLocation] == null || speelBord[pionYLocation+1][pionXLocation] == null){
+                if (movementCheck(pionYLocation,pionXLocation+1,false) //in deze if statement wordt elke richting gecheckt, als er eentje mogelijk is dan komt er True uit en is het gekozen speelstuk een Valid Piece. Als het gekozen speelstuk van eigen team is maar geen enkele kant op kan dan komt hier false uit dus is het niet mogelijk
+                        || movementCheck(pionYLocation,pionXLocation-1, false)
+                        || movementCheck(pionYLocation+1,pionXLocation,false)
+                        || movementCheck(pionYLocation-1,pionXLocation,false)){
                     return true;
                 } else {
                     System.out.println("Je hebt een speelstuk gekozen dat niet bewogen kan worden");
@@ -95,18 +105,21 @@ public class Bord {
 
 
 
-    private boolean movementCheck (int pionYLocation, int pionXLocation) {
+    private boolean movementCheck (int pionYLocation, int pionXLocation, boolean printInfo) {
         //Check of de nieuwe plaats wel op het bord ligt
+        //RICX: ik heb deze methode iets aangepakt zodat ik deze ook kan aanroepen in checkValidPiece om te kijken of het gekozen speelstuk uberhaupt kan bewegen.
+        //nu wordt elke richting a.d.h.v. deze functie gecheck om te kijken of het mogelijk is, maar in checkValidPiec wordt enige informatie niet geprint.
+        //bij movePiece wordt deze check ook uigevoerd met de ingegeven mogelijkheden en dan wordt de informatie wel gecheckt.
         if (pionYLocation < 0 || pionYLocation > 10 || pionXLocation < 0 || pionXLocation > 10) {
-            System.out.println("Deze locatie zit buiten het bord");
+            if (printInfo) {System.out.println("Deze locatie zit buiten het bord");}
             return false;
         }
         //Check of de nieuwe plaats wel beschikbaar is om heen te gaan
         else if (speelBord[pionYLocation][pionXLocation] instanceof Speelstuk) {
-            System.out.println("Dit kan nog niet, hier staat een andere Speelstuk");
+            if (printInfo) {System.out.println("Dit kan nog niet, hier staat een andere Speelstuk");}
             return false;
         } else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
-            System.out.println("Hier kun je niet doorheen!");
+            if (printInfo) {System.out.println("Hier kun je niet doorheen!");}
             return false;
         } else {
             return true;
@@ -131,28 +144,28 @@ public class Bord {
         switch (movementDirection) {
             case "u":
                 //Check of hij wel in deze richting kan bewegen, zo ja: voer move uit, zo nee: nieuwe input vragen
-                if (movementCheck(pionYLocation - 1,pionXLocation)){
+                if (movementCheck(pionYLocation - 1,pionXLocation,true)){
                     movePiece(pionYLocation - 1,pionXLocation,pionYLocation,pionXLocation);
                     return true;
                 } else {
                     return false;
                 }
             case "d":
-                if (movementCheck(pionYLocation + 1,pionXLocation)){
+                if (movementCheck(pionYLocation + 1,pionXLocation,true)){
                     movePiece(pionYLocation + 1,pionXLocation,pionYLocation,pionXLocation);
                     return true;
                 } else {
                     return false;
                 }
             case "r":
-                if (movementCheck(pionYLocation,pionXLocation + 1)){
+                if (movementCheck(pionYLocation,pionXLocation + 1,true)){
                     movePiece(pionYLocation,pionXLocation + 1,pionYLocation,pionXLocation);
                     return true;
                 } else {
                     return false;
                 }
             case "l":
-                if (movementCheck(pionYLocation,pionXLocation - 1)){
+                if (movementCheck(pionYLocation,pionXLocation - 1,true)){
                     movePiece(pionYLocation,pionXLocation - 1,pionYLocation,pionXLocation);
                     return true;
                 } else{
