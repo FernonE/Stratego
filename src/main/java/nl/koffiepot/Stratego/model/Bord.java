@@ -1,5 +1,6 @@
 package nl.koffiepot.Stratego.model;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import nl.koffiepot.Stratego.model.Speelstukken.*;
 
 import java.util.ArrayList;
@@ -50,6 +51,8 @@ public class Bord {
     }
 
 
+
+
     //Methode voor het maken van 40 speelstukken
     public List<Speelstuk> createteam(int team) {
         List<Speelstuk> Teamstukken = new ArrayList<>();
@@ -69,6 +72,7 @@ public class Bord {
         Teamstukken.add(new Vlag(team));
         return Teamstukken;
     }
+
 
     //method for asking pion (int y, int x)
         // calls method if pion is own team
@@ -100,8 +104,9 @@ public class Bord {
                     return false;
                 }
             }
-        }
+        } //else return true;
     }
+
 
 
 
@@ -115,10 +120,15 @@ public class Bord {
             return false;
         }
         //Check of de nieuwe plaats wel beschikbaar is om heen te gaan
-        else if (speelBord[pionYLocation][pionXLocation] instanceof Speelstuk) {
-            if (printInfo) {System.out.println("Dit kan nog niet, hier staat een andere Speelstuk");}
+        //else if (speelBord[pionYLocation][pionXLocation] instanceof Speelstuk) {
+        //    System.out.println("Dit kan nog niet, hier staat een ander speelstuk");
+        //    return false;
+        //}
+        else if(speelBord[pionYLocation][pionXLocation] instanceof Vlag){ //check voor de vlag ingebouwd, maar ook hier geldt, vlag van zowel beide teams (nog team specifiek maken)
+            if (printInfo) {System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!");} //en de game moet nog eindigen....
             return false;
-        } else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
+        }
+        else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
             if (printInfo) {System.out.println("Hier kun je niet doorheen!");}
             return false;
         } else {
@@ -127,14 +137,39 @@ public class Bord {
 
     }
 
+
+
+
     //Deze code verplaatst de stukken, maar kan alleen aangeroepen worden nadat de movement check is uitgevoerd
     //Daarom is deze ook private!
-    private void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld){
-        //Sla het speelstuk op de nieuwe plaats op
-        speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
-        //Gooi de oude weg
-        speelBord[pionYLocationOld][pionXLocationOld] = null;
+    //kijkt eerst of de nieuwe locatie een speelstuk bevat, zo ja, vergelijkt die de values met elkaar MOET NOG TEAM SPECIFIEK MAKEN, NU KAN JE OOK JE EIGEN SPEELSTUK AANVALLEN
+    private void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld) {
+
+        if (speelBord[pionYLocationNew][pionXLocationNew] instanceof Speelstuk) {
+            Speelstuk enemy = (Speelstuk) speelBord[pionYLocationNew][pionXLocationNew];
+            Speelstuk eigenSpeelstuk = (Speelstuk) speelBord[pionYLocationOld][pionXLocationOld];
+            System.out.println("ATTACK!!!" + '\n' + "Je valt aan met " + eigenSpeelstuk.getNaam());
+
+            if (eigenSpeelstuk.getValue() >= enemy.getValue()) {
+                System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU WIN!");
+                speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+            } else if (eigenSpeelstuk.getValue() < enemy.getValue()) {
+                System.out.println( "Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU LOST!");
+            } else {
+                speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+            }
+            speelBord[pionYLocationOld][pionXLocationOld] = null;
+        }
+        else {
+            speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+            speelBord[pionYLocationOld][pionXLocationOld] = null;
+
+        }
     }
+
+
+
+    //methode om movement te kiezen en te checken
 
     public boolean moveChooser(int pionYLocation, int pionXLocation, Speler speler) {
         Scanner scanner = new Scanner(System.in);

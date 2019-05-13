@@ -12,7 +12,6 @@ public class Spel {
 
     public static void main(String[] args) {
         boolean Randomplacement = false; //op true zetten om willekeurig een bord te maken, dit is mss makkelijker met testen.
-
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voer naam speler 1 in:");
         Speler speler1 = new Speler(scanner.nextLine(), 0);
@@ -37,6 +36,7 @@ public class Spel {
         }
 
 
+
         int turn = 0;
         boolean gamerunning = true;
 
@@ -57,6 +57,7 @@ public class Spel {
 
 
     }
+
 
 
     public long getId() {
