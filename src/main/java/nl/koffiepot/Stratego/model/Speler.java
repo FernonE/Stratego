@@ -96,14 +96,13 @@ public class Speler {
                 while(true) {
                     System.out.println("Welk speelstuk wil je hier neerzetten");
                     List[] options = this.speelstukSelectOptions(teamlijst); //hier komen 2 lijstjes uit (vandaar List[]), namelijk een List<String> met alle mogelijke Speelstukken en een List<Integer> met de values van deze speelstukken.
-                    List<String>  keuzes = options[0]; //hier worden die lijsten gescheiden
-                    List<Integer> values = options[1];
-                    System.out.println("Je kan kiezen uit: \n " + keuzes); //de List<String> wordt gebruikt om te kijken of de keuze die gemaakt is door de user correct is.
+                    List<String> printedNames = options[0]; //hier worden die lijsten gescheiden
+                    List<String> speelStuknamen = options[1];
+                    System.out.println("Je kan kiezen uit: \n " + printedNames); //de List<String> wordt gebruikt om te kijken of de keuze die gemaakt is door de user correct is.
                     String answer = scanner.nextLine();
-                    if (keuzes.contains(answer)){
-                        int ind = keuzes.indexOf(answer); //de index wordt gezocht van de correcte keuze
+                    if (speelStuknamen.contains(answer)){
                         for(Speelstuk speelstuk : teamlijst){ //en over alle nog te plaatste speelstukken wordt geloopt...
-                            if (speelstuk.getValue() == values.get(ind)){ //... Totdat de er een speelstuk is gevonden met dezelfde waarde als die gekozen is (vandaar 2 lijsten)
+                            if (speelstuk.getNaam().equals(answer)){ //... Totdat de er een speelstuk is gevonden met dezelfde waarde als die gekozen is (vandaar 2 lijsten)
                                 bord.setPiece(Coords[1],Coords[0],speelstuk); // dit speelstuk wordt dan op het bord gezet.
                                 teamlijst.remove(speelstuk); //en verwijderd uit de lijst met nog te plaatsen stukken.
                                 break;
@@ -121,21 +120,21 @@ public class Speler {
     private List[] speelstukSelectOptions(List<Speelstuk> teamlijst) {
         int[] counters = new int[12]; //een lijst van 12 counters, waarbij de index in deze lijst overeenkomt met de value van een speelstuk
         teamlijst.forEach(t -> counters[t.getValue()-1]++); //loop over alle speelstukken in teamlijst en increment de correcte counter aan de hand van de value.
-        List<String>  keuzes = new ArrayList<>();
-        List<Integer> values = new ArrayList<>();
-        if (counters[0]>0)  { keuzes.add("Spion"     ); values.add(1) ;} //als de correcte index groter is dan nul, dan houdt dat in dat deze speelstuk nog in de lijst zit. Dus dan dit aan de keuzes toevoegen.
-        if (counters[1]>0)  { keuzes.add("Verkenner" ); values.add(2) ;}
-        if (counters[2]>0)  { keuzes.add("Mineur"    ); values.add(3) ;}
-        if (counters[3]>0)  { keuzes.add("Sergeant"  ); values.add(4) ;}
-        if (counters[4]>0)  { keuzes.add("Luitenant" ); values.add(5) ;}
-        if (counters[5]>0)  { keuzes.add("Kapitein"  ); values.add(6) ;}
-        if (counters[6]>0)  { keuzes.add("Majoor"    ); values.add(7) ;}
-        if (counters[7]>0)  { keuzes.add("Kolonel"   ); values.add(8) ;}
-        if (counters[8]>0)  { keuzes.add("Generaal"  ); values.add(9) ;}
-        if (counters[9]>0)  { keuzes.add("Maarschalk"); values.add(10);}
-        if (counters[10]>0) { keuzes.add("Bom"       ); values.add(11);}
-        if (counters[11]>0) { keuzes.add("Vlag"      ); values.add(12);}
-        return new List[]{keuzes, values};
+        List<String> printedNames = new ArrayList<>();
+        List<String> speelStukNamen = new ArrayList<>();
+        if (counters[0]>0)  { printedNames.add(counters[0]  + "X Spion"     ); speelStukNamen.add("spion") ;} //als de correcte index groter is dan nul, dan houdt dat in dat deze speelstuk nog in de lijst zit. Dus dan dit aan de keuzes toevoegen.
+        if (counters[1]>0)  { printedNames.add(counters[1]  + "X Verkenner" ); speelStukNamen.add("verkenner") ;}
+        if (counters[2]>0)  { printedNames.add(counters[2]  + "X Mineur"    ); speelStukNamen.add("mineur") ;}
+        if (counters[3]>0)  { printedNames.add(counters[3]  + "X Sergeant"  ); speelStukNamen.add("sergeant") ;}
+        if (counters[4]>0)  { printedNames.add(counters[4]  + "X Luitenant" ); speelStukNamen.add("luitenant") ;}
+        if (counters[5]>0)  { printedNames.add(counters[5]  + "X Kapitein"  ); speelStukNamen.add("kapitein") ;}
+        if (counters[6]>0)  { printedNames.add(counters[6]  + "X Majoor"    ); speelStukNamen.add("majoor") ;}
+        if (counters[7]>0)  { printedNames.add(counters[7]  + "X Kolonel"   ); speelStukNamen.add("kolonel") ;}
+        if (counters[8]>0)  { printedNames.add(counters[8]  + "X Generaal"  ); speelStukNamen.add("generaal") ;}
+        if (counters[9]>0)  { printedNames.add(counters[9]  + "X Maarschalk"); speelStukNamen.add("maarschalk");}
+        if (counters[10]>0) { printedNames.add(counters[10] + "X Bom"       ); speelStukNamen.add("bom");}
+        if (counters[11]>0) { printedNames.add(counters[11] + "X Vlag"      ); speelStukNamen.add("vlag");}
+        return new List[]{printedNames, speelStukNamen};
     }
 
     private List<Speelstuk> createteam(int team) {

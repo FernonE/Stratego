@@ -4,6 +4,6 @@ import nl.koffiepot.Stratego.model.Speelstuk;
 
 public class Maarschalk extends Speelstuk {
     public Maarschalk(int team){
-        super(team,10,"Maarschalk");
+        super(team,10,"maarschalk");
     }
 }
