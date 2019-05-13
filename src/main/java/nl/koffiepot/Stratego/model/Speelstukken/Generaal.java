@@ -4,6 +4,6 @@ import nl.koffiepot.Stratego.model.Speelstuk;
 
 public class Generaal extends Speelstuk {
     public Generaal(int team){
-        super(team,9, "Generaal");
+        super(team,9, "generaal");
     }
 }

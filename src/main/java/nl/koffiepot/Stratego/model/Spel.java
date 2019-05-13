@@ -1,6 +1,8 @@
-
 package nl.koffiepot.Stratego.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Spel {
@@ -9,40 +11,52 @@ public class Spel {
     private String name;
 
     public static void main(String[] args) {
-
+        boolean Randomplacement = false; //op true zetten om willekeurig een bord te maken, dit is mss makkelijker met testen.
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voer naam speler 1 in:");
-        Speler speler1 = new Speler(scanner.nextLine(),0);
+        Speler speler1 = new Speler(scanner.nextLine(), 0);
         System.out.print("Voer naam speler 2 in:");
-        Speler speler2 = new Speler(scanner.nextLine(),1);
+        Speler speler2 = new Speler(scanner.nextLine(), 1);
 
+        //De spelers uitprinten
         System.out.println(speler1);
         System.out.println(speler2);
 
-        Bord spelerBord = new Bord();
+        //de spelers in een lijst zetten
+        List<Speler> spelers = new ArrayList<>();
+        spelers.add(speler1);
+        spelers.add(speler2);
 
-        //spelerBord.bordPrinten();
-        spelerBord.bordPrinten(0);
+        //Een nieuw bord aanmaken
+        Bord spelerBord = new Bord(Randomplacement);
 
-        speler1.beurt(spelerBord);
-        spelerBord.bordPrinten(0);
-
-        speler1.beurt(spelerBord);
-        spelerBord.bordPrinten(0);
-
-        spelerBord.bordPrinten();
-
-        speler1.beurt(spelerBord);
-        spelerBord.bordPrinten(0);
+        if(!Randomplacement) {
+            speler1.zetTeam(spelerBord);
+            speler2.zetTeam(spelerBord);
+        }
 
 
-        speler1.beurt(spelerBord);
-        spelerBord.bordPrinten(0);
 
-        speler1.beurt(spelerBord);
-        spelerBord.bordPrinten(0);
+        int turn = 0;
+        boolean gamerunning = true;
+
+        while (gamerunning) {
+            Speler huidigespeler = spelers.get(turn);
+            spelerBord.bordPrinten(huidigespeler.getSpelerTeam());
+            huidigespeler.beurt(spelerBord);
+            /*
+            if [einde spel] {
+                gamerunning = false
+            }
+             */
+            turn++;
+            if (turn == spelers.size()) {
+                turn = 0;
+            }
+        }
+
+
     }
-
 
 
 
