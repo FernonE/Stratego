@@ -10,8 +10,6 @@ public class Spel {
 
     public static void main(String[] args) {
 
-
-
         Scanner scanner = new Scanner(System.in);
         System.out.print("Voer naam speler 1 in:");
         Speler speler1 = new Speler(scanner.nextLine(),0);
@@ -43,15 +41,6 @@ public class Spel {
 
         speler1.beurt(spelerBord);
         spelerBord.bordPrinten(0);
-
-
-
-
-
-
-
-
-
     }
 
 
