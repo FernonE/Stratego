@@ -158,15 +158,6 @@ public class Speler {
         return Teamstukken;
     }
 
-    //Getters and Setters (zijn ze allemaal nodig)?
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     //getters & setters
     public String getSpelerNaam() {
         return spelerNaam;
@@ -191,5 +182,13 @@ public class Speler {
 
     public void setGewonnen(boolean gewonnen) {
         this.gewonnen = gewonnen;
+    }
+
+    @Override
+    public String toString() {
+        return "Speler{" +
+                "spelerNaam='" + spelerNaam + '\'' +
+                ", spelerTeam=" + spelerTeam +
+                '}';
     }
 }
