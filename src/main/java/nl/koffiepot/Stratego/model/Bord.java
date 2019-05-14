@@ -119,30 +119,23 @@ public class Bord {
             if (printInfo) {
                 System.out.println("Deze locatie zit buiten het bord");
             }
-            return false;
-        }
-        //Check of de nieuwe plaats wel beschikbaar is om heen te gaan
-        else if (speelBord[pionYLocation][pionXLocation] instanceof Speelstuk) {
+            return false;  // out of bounds -> dus mag je niet bewegen
+        } else if (speelBord[pionYLocation][pionXLocation] instanceof Speelstuk) {
             Speelstuk tempSpeelstuk = (Speelstuk) speelBord[pionYLocation][pionXLocation];
             if (tempSpeelstuk.getTeam() == team) {
-                if (printInfo) {
-                    System.out.println("Hier staat je eigen pion");
-                }
-                return false;
+                if (printInfo) System.out.println("Hier staat je eigen pion");
+                return false; //instance of speelstuk, maar eigen team --> dus je mag niet bewegen
             } else if (speelBord[pionYLocation][pionXLocation] instanceof Vlag) { //check voor de vlag ingebouwd, maar ook hier geldt, vlag van zowel beide teams (nog team specifiek maken)
-                if (printInfo) {
-                    System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!");
-                } //en de game moet nog eindigen....
-                return false;
-            } else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
-                if (printInfo) {
-                    System.out.println("Hier kun je niet doorheen!");
-                }
-                return false;
+                if (printInfo) System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!"); //en de game moet nog eindigen....
+                return true; //instance of speelstuk, niet van je eigen team maar wel een vlag --> dus je mag wel bewegen
             } else {
-                return true;
+                return true; //instance of speelstuk, niet van eigen team --> je mag wel bewegen
             }
-
+        } else if (speelBord[pionYLocation][pionXLocation] instanceof Blokkade) {
+            if (printInfo) System.out.println("Hier kun je niet doorheen!");
+            return false; //instance of blokkade, je mag niet bewegen
+        } else {
+            return true; //nieuwe positie is leeg, dus je kan wel bewegen.
         }
     }
 
