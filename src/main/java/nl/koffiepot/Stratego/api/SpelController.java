@@ -22,9 +22,9 @@ public class SpelController {
         return spelerService.findAll();
     }
 
-    @GetMapping("/{tempSpelerNaam1}/{tempSpelerNaam2}")
-    public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2){
-        boolean Randomplacement = true;
+    @GetMapping("/{tempSpelerNaam1}/{tempSpelerNaam2}/{randomPlacement}")
+    public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2,@PathVariable String randomPlacement){
+        boolean Randomplacement = Boolean.parseBoolean(randomPlacement);
 
         Speler speler1 = new Speler(tempSpelerNaam1,0);
         Speler speler2 = new Speler(tempSpelerNaam2,1);
