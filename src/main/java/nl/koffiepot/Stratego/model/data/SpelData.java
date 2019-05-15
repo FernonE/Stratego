@@ -16,6 +16,14 @@ public class SpelData {
     public SpelData() {
     }
 
+    public void saveData(String name) {
+        this.name = name;
+    }
+
+    public String loadData() {
+        return this.name;
+    }
+
     public long getId() {
         return id;
     }
