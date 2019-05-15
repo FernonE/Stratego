@@ -3,6 +3,7 @@ package nl.koffiepot.Stratego.api;
 import nl.koffiepot.Stratego.model.Bord;
 import nl.koffiepot.Stratego.model.Speler;
 import nl.koffiepot.Stratego.model.data.SpelerData;
+import nl.koffiepot.Stratego.service.SpelService;
 import nl.koffiepot.Stratego.service.SpelerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ public class SpelController {
 
     @Autowired
     private SpelerService spelerService;
+
+    @Autowired
+    private SpelService spelService;
 
     @GetMapping
     public Iterable<SpelerData> getAllPlayers(){

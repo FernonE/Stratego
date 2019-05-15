@@ -1,11 +1,8 @@
 package nl.koffiepot.Stratego;
 
 
-import nl.koffiepot.Stratego.model.Speler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.Scanner;
 
 @SpringBootApplication
 public class StrategoApplication {
