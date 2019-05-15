@@ -43,7 +43,7 @@ public class Spel {
         while (gamerunning) {
             Speler huidigespeler = spelers.get(turn);
             spelerBord.bordPrinten(huidigespeler.getSpelerTeam());
-            huidigespeler.beurt(spelerBord);
+            huidigespeler.beurt(spelerBord, huidigespeler);
             /*
             if [einde spel] {
                 gamerunning = false

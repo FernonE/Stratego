@@ -20,18 +20,21 @@ public class Bord {
     //Constructor(s), de default constructor
     public Bord(boolean RandomPlacement) {
         if (RandomPlacement) {
-            List<Speelstuk> team1 = this.createteam(0); //De tijdelijk functie om een team aan te maken aante roepen
-            List<Speelstuk> team2 = this.createteam(1); //
+            List<Speelstuk> team1 = Speler.createteam(0); //De tijdelijk functie om een team aan te maken aante roepen
+            List<Speelstuk> team2 = Speler.createteam(1); //
             Random rand = new Random();
-            for (int y = 0; y < 4; y++) { //het bord vullen
-                for (int x = 0; x < 10; x++) {
-                    int ind = rand.nextInt(team1.size());
-                    speelBord[y][x] = team1.get(ind);
-                    team1.remove(ind);
+            LOOP: while(true) {
+                for (int y = 0; y < 4; y++) { //het bord vullen
+                    for (int x = 0; x < 10; x++) {
+                        int ind = rand.nextInt(team1.size());
+                        speelBord[y][x] = team1.get(ind);
+                        team1.remove(ind);
 
-                    ind = rand.nextInt(team2.size()); //dit kan gelijk voor team 2, de x coordinaat wordt alleen met 6 verhoogd.
-                    speelBord[y + 6][x] = team2.get(ind);
-                    team2.remove(ind);
+                        ind = rand.nextInt(team2.size()); //dit kan gelijk voor team 2, de x coordinaat wordt alleen met 6 verhoogd.
+                        speelBord[y + 6][x] = team2.get(ind);
+                        team2.remove(ind);
+                        if (team1.isEmpty()) break LOOP;
+                    }
                 }
             }
         }
@@ -53,25 +56,6 @@ public class Bord {
 
 
 
-    //Methode voor het maken van 40 speelstukken
-    public List<Speelstuk> createteam(int team) {
-        List<Speelstuk> Teamstukken = new ArrayList<>();
-        //Elk stuk krijgt een apart object en daarom worden 40 stukken gemaakt hieronder. Deze krijgen allemaal
-        //het teamnummer mee zodat er onderscheid gemaakt kan worden.
-        for (int i = 0; i < 6; i++) Teamstukken.add(new Bom(team));
-        Teamstukken.add(new Maarschalk(team));
-        Teamstukken.add(new Generaal(team));
-        for (int i = 0; i < 2; i++) Teamstukken.add(new Kolonel(team));
-        for (int i = 0; i < 3; i++) Teamstukken.add(new Majoor(team));
-        for (int i = 0; i < 4; i++) Teamstukken.add(new Kapitein(team));
-        for (int i = 0; i < 4; i++) Teamstukken.add(new Luitenant(team));
-        for (int i = 0; i < 4; i++) Teamstukken.add(new Sergeant(team));
-        for (int i = 0; i < 5; i++) Teamstukken.add(new Mineur(team));
-        for (int i = 0; i < 8; i++) Teamstukken.add(new Verkenner(team));
-        Teamstukken.add(new Spion(team));
-        Teamstukken.add(new Vlag(team));
-        return Teamstukken;
-    }
 
 
     //method for asking pion (int y, int x)
@@ -94,7 +78,13 @@ public class Bord {
             } else { //als het gekozen speelstuk eindelijk wel goed is, dan even kijken of er een beweegbare plek is (1 plek omheen die 'null' is)
                 //if (speelBord[pionYLocation][pionXLocation+1] == null || speelBord[pionYLocation][pionXLocation-1] == null //deze check heeft een bug als een correcte speelstuk aan de rand is gekozen omdat hij dan buiten het bord check of de index 'null' is. Maar buiten het bord is er geen index dus krijg je een ArrayIndexOutOfboundsException.
                 //        || speelBord[pionYLocation-1][pionXLocation] == null || speelBord[pionYLocation+1][pionXLocation] == null){
-                if (movementCheck(pionYLocation,pionXLocation+1,false,team) //in deze if statement wordt elke richting gecheckt, als er eentje mogelijk is dan komt er True uit en is het gekozen speelstuk een Valid Piece. Als het gekozen speelstuk van eigen team is maar geen enkele kant op kan dan komt hier false uit dus is het niet mogelijk
+                if (gekozenSpeelStuk.getNaam().equals("bom")) {
+                    System.out.println("Je kunt geen bom bewegen");
+                    return false;
+                } else if (gekozenSpeelStuk.getNaam().equals("vlag")) {
+                    System.out.println("Je kunt geen vlag bewegen");
+                    return false;
+                } else if (movementCheck(pionYLocation,pionXLocation+1,false,team) //in deze if statement wordt elke richting gecheckt, als er eentje mogelijk is dan komt er True uit en is het gekozen speelstuk een Valid Piece. Als het gekozen speelstuk van eigen team is maar geen enkele kant op kan dan komt hier false uit dus is het niet mogelijk
                         || movementCheck(pionYLocation,pionXLocation-1, false,team)
                         || movementCheck(pionYLocation+1,pionXLocation,false,team)
                         || movementCheck(pionYLocation-1,pionXLocation,false,team)){
@@ -115,7 +105,7 @@ public class Bord {
         //RICX: ik heb deze methode iets aangepakt zodat ik deze ook kan aanroepen in checkValidPiece om te kijken of het gekozen speelstuk uberhaupt kan bewegen.
         //nu wordt elke richting a.d.h.v. deze functie gecheck om te kijken of het mogelijk is, maar in checkValidPiec wordt enige informatie niet geprint.
         //bij movePiece wordt deze check ook uigevoerd met de ingegeven mogelijkheden en dan wordt de informatie wel gecheckt.
-        if (pionYLocation < 0 || pionYLocation > 10 || pionXLocation < 0 || pionXLocation > 10) {
+        if (pionYLocation < 1 || pionYLocation > 10 || pionXLocation < 1 || pionXLocation > 10) {
             if (printInfo) {
                 System.out.println("Deze locatie zit buiten het bord");
             }
@@ -125,9 +115,9 @@ public class Bord {
             if (tempSpeelstuk.getTeam() == team) {
                 if (printInfo) System.out.println("Hier staat je eigen pion");
                 return false; //instance of speelstuk, maar eigen team --> dus je mag niet bewegen
-            } else if (speelBord[pionYLocation][pionXLocation] instanceof Vlag) { //check voor de vlag ingebouwd, maar ook hier geldt, vlag van zowel beide teams (nog team specifiek maken)
-                if (printInfo) System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!"); //en de game moet nog eindigen....
-                return true; //instance of speelstuk, niet van je eigen team maar wel een vlag --> dus je mag wel bewegen
+//            } else if (speelBord[pionYLocation][pionXLocation] instanceof Vlag) { //check voor de vlag ingebouwd, maar ook hier geldt, vlag van zowel beide teams (nog team specifiek maken)
+//                if (printInfo) System.out.println("JE HEBT GEWONNEN, GEFELICITEERD!!!!"); //en de game moet nog eindigen....
+//                return true; //instance of speelstuk, niet van je eigen team maar wel een vlag --> dus je mag wel bewegen
             } else {
                 return true; //instance of speelstuk, niet van eigen team --> je mag wel bewegen
             }
@@ -139,35 +129,62 @@ public class Bord {
         }
     }
 
-
-
-
     //Deze code verplaatst de stukken, maar kan alleen aangeroepen worden nadat de movement check is uitgevoerd
     //Daarom is deze ook private!
     //kijkt eerst of de nieuwe locatie een speelstuk bevat, zo ja, vergelijkt die de values met elkaar MOET NOG TEAM SPECIFIEK MAKEN, NU KAN JE OOK JE EIGEN SPEELSTUK AANVALLEN
-    private void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld) {
+    private void movePiece (int pionYLocationNew, int pionXLocationNew, int pionYLocationOld, int pionXLocationOld, Speler speler) {
 
         if (speelBord[pionYLocationNew][pionXLocationNew] instanceof Speelstuk) {
             Speelstuk enemy = (Speelstuk) speelBord[pionYLocationNew][pionXLocationNew];
             Speelstuk eigenSpeelstuk = (Speelstuk) speelBord[pionYLocationOld][pionXLocationOld];
-            System.out.println("ATTACK!!!" + '\n' + "Je valt aan met " + eigenSpeelstuk.getNaam());
+            System.out.println("-----      ATTACK!      -----" + '\n' + "Je valt aan met " + eigenSpeelstuk.getNaam() + "(" + eigenSpeelstuk.getValue() + ")");
 
-            if (eigenSpeelstuk.getValue() >= enemy.getValue()) {
-                System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU WIN!");
+            switch (enemy.getNaam()) {
+            case "vlag":
+                System.out.println("Je hebt een vlag aangevallen " + '\n' + "----- U heeft gewonnen! -----");
                 speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
-            } else if (eigenSpeelstuk.getValue() < enemy.getValue()) {
-                System.out.println( "Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU LOST!");
-            } else {
-                speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+                speelBord[pionYLocationOld][pionXLocationOld] = null;
+                speler.setGewonnen(true);
+                break;
+            case "bom":
+                if (eigenSpeelstuk.getNaam().equals("mineur")) {
+                    System.out.println("Je hebt een bom aangevallen " + '\n' + "-----     YOU WIN!!     -----");
+                    speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+                } else {
+                    System.out.println("Je hebt een bom aangevallen " + '\n' + "-----     YOU LOST!     -----");
+                }
+                speelBord[pionYLocationOld][pionXLocationOld] = null;
+                break;
+            case "maarschalk":
+                if (eigenSpeelstuk.getNaam().equals("spion")) {
+                    System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen " + "(" + enemy.getValue() + ")" + '\n' + "-----     YOU WIN!!     -----");
+                    speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+                } else {
+                    System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen " + "(" + enemy.getValue() + ")" + '\n' + "-----     YOU LOST!     -----");
+                }
+                speelBord[pionYLocationOld][pionXLocationOld] = null;
+                break;
+            default:
+                if (eigenSpeelstuk.getValue() > enemy.getValue()) {
+                    System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen " + "(" + enemy.getValue() + ")" + '\n' + "-----     YOU WIN!!     -----");
+                    speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+                } else if (eigenSpeelstuk.getValue() < enemy.getValue()) {
+                    System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen " + "(" + enemy.getValue() + ")" + '\n' + "-----     YOU LOST!     -----");
+                } else if (eigenSpeelstuk.getValue() == enemy.getValue()) { //Deze kijkt als hij gelijk is en maakt beide posities leeg
+                    System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen " + "(" + enemy.getValue() + ")" + '\n' + "-----    BOTH LOOSE!    -----");
+                    speelBord[pionYLocationNew][pionXLocationNew] = null;
+                } else {
+                    speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+                }
+                speelBord[pionYLocationOld][pionXLocationOld] = null;
+                break;
             }
-            speelBord[pionYLocationOld][pionXLocationOld] = null;
-        }
-        else {
-            speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
-            speelBord[pionYLocationOld][pionXLocationOld] = null;
-
+        } else {
+        speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
+        speelBord[pionYLocationOld][pionXLocationOld] = null;
         }
     }
+
 
 
 
@@ -182,28 +199,28 @@ public class Bord {
             case "u":
                 //Check of hij wel in deze richting kan bewegen, zo ja: voer move uit, zo nee: nieuwe input vragen
                 if (movementCheck(pionYLocation - 1,pionXLocation,true,speler.getSpelerTeam())){
-                    movePiece(pionYLocation - 1,pionXLocation,pionYLocation,pionXLocation);
+                    movePiece(pionYLocation - 1,pionXLocation,pionYLocation,pionXLocation,speler);
                     return true;
                 } else {
                     return false;
                 }
             case "d":
                 if (movementCheck(pionYLocation + 1,pionXLocation,true,speler.getSpelerTeam())){
-                    movePiece(pionYLocation + 1,pionXLocation,pionYLocation,pionXLocation);
+                    movePiece(pionYLocation + 1,pionXLocation,pionYLocation,pionXLocation,speler);
                     return true;
                 } else {
                     return false;
                 }
             case "r":
                 if (movementCheck(pionYLocation,pionXLocation + 1,true,speler.getSpelerTeam())){
-                    movePiece(pionYLocation,pionXLocation + 1,pionYLocation,pionXLocation);
+                    movePiece(pionYLocation,pionXLocation + 1,pionYLocation,pionXLocation,speler);
                     return true;
                 } else {
                     return false;
                 }
             case "l":
                 if (movementCheck(pionYLocation,pionXLocation - 1,true,speler.getSpelerTeam())){
-                    movePiece(pionYLocation,pionXLocation - 1,pionYLocation,pionXLocation);
+                    movePiece(pionYLocation,pionXLocation - 1,pionYLocation,pionXLocation,speler);
                     return true;
                 } else{
                     return false;

@@ -31,4 +31,6 @@ public class SpelerService {
     public void deleteById(Long aLong) {
         spelerRepository.deleteById(aLong);
     }
+
+
 }

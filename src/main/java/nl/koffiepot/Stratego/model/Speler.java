@@ -39,6 +39,37 @@ public class Speler {
             String second = answer.substring(ind+1);
             coords[0] = Integer.parseInt(first)-1;
             coords[1] = Integer.parseInt(second)-1;
+            if (coords[0] < 0 || coords[0] > 9 || coords[1] < 0 || coords[1] > 9) {
+                throw new IndexOutOfBoundsException();
+            }
+        } catch (Exception e){
+            coords[0] = -1;
+            coords[1] = -1;
+        }
+        return coords;
+    }
+
+    private int[] selectCoordsPlacing(int spelerTeam){
+        String answer = scanner.nextLine();
+        int[] coords = new int[]{0,0};
+        try{
+            int ind = answer.indexOf(','); // ik heb deze in de try block gezet. Als iemand ipv coordinaten een string invoert dan wordt deze exception ook gevangen.
+            String first = answer.substring(0,ind);
+            String second = answer.substring(ind+1);
+            coords[0] = Integer.parseInt(first)-1;
+            coords[1] = Integer.parseInt(second)-1;
+            if (coords[0] < 0 || coords[0] > 9 || coords[1] < 0 || coords[1] > 9) {
+                System.out.println("Dit zit buiten het veld");
+                throw new IndexOutOfBoundsException();
+            }
+            if (spelerTeam == 0 && coords[1] > 3 ) {
+                System.out.println("Je kunt geen stukken plaatsen buiten je veld (y moet tussen 1 en 4 liggen)");
+                throw new NotYourPartOfBoardException();
+            }
+            if (spelerTeam == 1 && coords[1] < 6) {
+                System.out.println("Je kunt geen stukken plaatsen buiten je veld (y moet tussen 7 en 10 liggen)");
+                throw new NotYourPartOfBoardException();
+            }
         } catch (Exception e){
             coords[0] = -1;
             coords[1] = -1;
@@ -47,38 +78,38 @@ public class Speler {
     }
 
 
-    public void beurt(Bord bord) {
+    public void beurt(Bord bord, Speler speler) {
 
         //in een do while not correct loop zetten
-        boolean passed = false;
+        boolean passed;
+        boolean happy; //Als je blij bent met je keuze ga je door anders keer je terug naar kiezen
         //deze wordt aangepast
         int[] selectCoords;
-        do{
-            passed = true; // eerst maar eens even de check op true zetten.
-            System.out.println("Welke speelstuk wil je bewegen? Voer coordinaten in als volgt: x,y"); //Deze vraag hier neergezet
-            selectCoords = this.selectCoords(); //Vraag om user input om te bepalen welke speelstuk hij/zij wil verzetten. {-1,-1} als het niet goed is, {x, y} als het wel goed is
-            if (selectCoords[0] == -1) { // eerst kijken of de user wel goede input heeft gegeven
-                System.out.println("Er ging iets mis met het invoeren, probeer het nog een keer");
-                passed = false;
-                continue; //als het misgaat, springt java vanaf hier meteen naar de while(!passed) en slaat de volgende check dus over. Aangezien dat niet gaat :)
-            }
-            if(!bord.checkValidPiece(selectCoords[1], selectCoords[0],this.spelerTeam)){ //daarna kijken of het wel een correcte speelstuk is
-                //prints wanneer iets verkeerd gekozen is gebeurt al in bord.
-                passed = false;
-            }
-        } while(!passed); // blijf vragen totdat user input goed is en het een correcte speelstuk is.
+        do {
+            do {
+                System.out.println(speler.getSpelerNaam() + " is aan zet. Welk speelstuk wil je bewegen? Voer coordinaten in als volgt: x,y"); //Deze vraag hier neergezet
+                selectCoords = this.selectCoords(); //Vraag om user input om te bepalen welke speelstuk hij/zij wil verzetten. {-1,-1} als het niet goed is, {x, y} als het wel goed is
+                if (selectCoords[0] == -1) { // eerst kijken of de user wel goede input heeft gegeven
+                    passed = false;
+                } else {
+                    passed = bord.checkValidPiece(selectCoords[1], selectCoords[0], this.spelerTeam); //returns true if validpiece, but false if it is not valid
+                }
+            } while (!passed); // blijf vragen totdat user input goed is en het een correcte speelstuk is.
 
 
-        passed = false; //passed weer op false zetten.
-        do{
-            System.out.println("welke richting wil je deze op bewegen?");
-            System.out.println("selecteer uit up(u), down(d), left(l) of right(r)");
-            //bord.moveChooser vraag al om user input welke richting je op wilt, als dit mogelijk is gebeurt dit ook meteen
-            //is de move ook uitgevoerd, dan komt true eruit, en anders false
-            if (bord.moveChooser(selectCoords[1], selectCoords[0],this)){ //in bord.moveChooser, wordt al gevraagd voor user input in welke richting je wilt bewegen, en wordt dit gedaan waneer het kan.
-                passed = true;
-            }
-        } while (!passed);
+            do {
+                System.out.println("U heeft een " + ((Speelstuk) bord.speelBord[selectCoords[1]][selectCoords[0]]).getNaam() +"("+((Speelstuk) bord.speelBord[selectCoords[1]][selectCoords[0]]).getValue()+")" + " gekozen. Klopt dit? Y/N");
+                happy = scanner.nextLine().equalsIgnoreCase("y"); //Als je blij bent met je keuze wordt happy true en dan breakt hij de loop
+                if (happy) {
+                    System.out.println("welke richting wil je deze op bewegen?");
+                    System.out.println("selecteer uit up(u), down(d), left(l) of right(r)");
+                    passed = bord.moveChooser(selectCoords[1], selectCoords[0], this); //in bord.moveChooser, wordt al gevraagd voor user input in welke richting je wilt bewegen, en wordt dit gedaan waneer het kan.
+                }
+            } while (!passed);
+        } while (!happy);
+        bord.bordPrinten(this.spelerTeam);
+        System.out.println("Press enter to continue");
+        scanner.nextLine();
     }
 
     // deze methode vraagt de user om omstebeurt een speelstuk op het bord neer te zetten door eerst te vragen op welk coordinaat en daarna welke speelstuk.
@@ -89,23 +120,20 @@ public class Speler {
         while(!teamlijst.isEmpty()){
             bord.bordPrinten(this.spelerTeam);
             System.out.println("Waar wil je het volgende speelstuk neerzetten? voer in als x,y");
-            Coords = this.selectCoords(); // parse de gegeven string naar twee ints
-            if (Coords[0] == -1){
-                System.out.println("Er ging iets mis met het invoeren, probeer het nog een keer");
-            } else if (bord.getSpeelBord()[Coords[1]][Coords[0]]!=null){ //als het niet null is, dan staat er al iets anders
-                System.out.println("hier staat als iets");
-            } else { // Hier is de keuze van de coordinaat wel goed
-                while(true) {
+            Coords = this.selectCoordsPlacing(this.spelerTeam); // parse de gegeven string naar twee ints
+            if (Coords[0] != -1 && bord.getSpeelBord()[Coords[1]][Coords[0]]==null) { //als het niet null is, dan staat er al iets anders
+                // Hier is de keuze van de coordinaat wel goed
+                while (true) {
                     System.out.println("Welk speelstuk wil je hier neerzetten");
                     List[] options = this.speelstukSelectOptions(teamlijst); //hier komen 2 lijstjes uit (vandaar List[]), namelijk een List<String> met alle mogelijke Speelstukken en een List<Integer> met de values van deze speelstukken.
                     List<String> printedNames = options[0]; //hier worden die lijsten gescheiden
                     List<String> speelStuknamen = options[1];
                     System.out.println("Je kan kiezen uit: \n " + printedNames); //de List<String> wordt gebruikt om te kijken of de keuze die gemaakt is door de user correct is.
                     String answer = scanner.nextLine();
-                    if (speelStuknamen.contains(answer)){
-                        for(Speelstuk speelstuk : teamlijst){ //en over alle nog te plaatste speelstukken wordt geloopt...
-                            if (speelstuk.getNaam().equals(answer)){ //... Totdat de er een speelstuk is gevonden met dezelfde waarde als die gekozen is (vandaar 2 lijsten)
-                                bord.setPiece(Coords[1],Coords[0],speelstuk); // dit speelstuk wordt dan op het bord gezet.
+                    if (speelStuknamen.contains(answer)) {
+                        for (Speelstuk speelstuk : teamlijst) { //en over alle nog te plaatste speelstukken wordt geloopt...
+                            if (speelstuk.getNaam().equals(answer)) { //... Totdat de er een speelstuk is gevonden met dezelfde waarde als die gekozen is (vandaar 2 lijsten)
+                                bord.setPiece(Coords[1], Coords[0], speelstuk); // dit speelstuk wordt dan op het bord gezet.
                                 teamlijst.remove(speelstuk); //en verwijderd uit de lijst met nog te plaatsen stukken.
                                 break;
                             }
@@ -115,6 +143,8 @@ public class Speler {
                         System.out.println("je hebt een verkeerde keuze gemaakt");
                     }
                 }
+            } else if (Coords[0] != -1 && bord.getSpeelBord()[Coords[1]][Coords[0]]!=null) {
+                System.out.println("hier staat als iets");
             }
         }
     }
@@ -139,7 +169,7 @@ public class Speler {
         return new List[]{printedNames, speelStukNamen};
     }
 
-    private List<Speelstuk> createteam(int team) {
+    public static List<Speelstuk> createteam(int team) {
         List<Speelstuk> Teamstukken = new ArrayList<>();
         //Elk stuk krijgt een apart object en daarom worden 40 stukken gemaakt hieronder. Deze krijgen allemaal
         //het teamnummer mee zodat er onderscheid gemaakt kan worden.
