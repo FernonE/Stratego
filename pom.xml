@@ -11,7 +11,7 @@
 	<groupId>nl.koffiepot</groupId>
 	<artifactId>Stratego</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Stratego</name>
+    <spelNaam>Stratego</spelNaam>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

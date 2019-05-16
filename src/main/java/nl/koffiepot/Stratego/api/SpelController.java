@@ -66,6 +66,7 @@ public class SpelController {
             /*
             if [einde spel] {
                 gamerunning = false
+                speelstukservice.savespeelstukken()
             }
              */
             turn++;

@@ -1,9 +1,6 @@
 package nl.koffiepot.Stratego.model.data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class SpelData {
@@ -11,28 +8,31 @@ public class SpelData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    private String spelNaam;
+
+    @OneToMany
+    private SpelerData spelerData;
 
     public SpelData() {
     }
 
     public void saveData(String name) {
-        this.name = name;
+        this.spelNaam = name;
     }
 
     public String loadData() {
-        return this.name;
+        return this.spelNaam;
     }
 
     public long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getSpelNaam() {
+        return spelNaam;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSpelNaam(String spelNaam) {
+        this.spelNaam = spelNaam;
     }
 }
