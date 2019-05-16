@@ -1,6 +1,8 @@
 package nl.koffiepot.Stratego.model.data;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class SpelerData {
@@ -14,7 +16,11 @@ public class SpelerData {
     private int spelerLosses;
 
     @OneToMany
-    private SpeelStukData speelStukData;
+    private Set<SpeelStukData> speelStukDataSet = new HashSet<>();
+
+    public void addSpeelStukData(SpeelStukData speelStukData) {
+        speelStukDataSet.add(speelStukData);
+    }
 
     public SpelerData(){}
 

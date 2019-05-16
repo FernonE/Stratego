@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SpeelStukDataRepository extends CrudRepository<SpeelStukData, Long> {
-    //een random comment
+
 }
 

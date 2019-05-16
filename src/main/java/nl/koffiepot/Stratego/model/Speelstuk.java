@@ -5,9 +5,6 @@ public class Speelstuk {
     private int value;
     private String naam;
     private int team;
-    private int Xcoordinate;
-    private int Ycoordinate;
-    private String Spelnaam;
 
 
     public Speelstuk(int team,int value, String naam){

@@ -45,8 +45,8 @@ public class SpelController {
     public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2){
         clearScreen();
         boolean Randomplacement = true;
-        spelNaam = tempSpelerNaam1 + tempSpelerNaam2;
-        spelData.setSpelNaam(spelNaam); // het spelnaam opslaan in het object
+        spelNaam = tempSpelerNaam1 + tempSpelerNaam2; //MariskaRick
+        spelData = new SpelData(spelNaam);
 
         //eerst de spelers inladen als ze bestaan.
         Optional<SpelerData> speler1Data = spelerDataService.findBySpelerNaam(tempSpelerNaam1);
@@ -89,40 +89,46 @@ public class SpelController {
 
         while (gamerunning) {
             Speler huidigeSpeler = spelers.get(turn);
+            vorigeSpeler = spelers.get(++turn); //temporary voor debuggen
             spelerBord.bordPrinten(huidigeSpeler.getSpelerTeam());
-            huidigeSpeler.beurt(spelerBord);
-
+            //huidigeSpeler.beurt(spelerBord);
+            huidigeSpeler.setGewonnen(true);//temporary voor debuggen
             /* In een aanval wordt gecheckt of de vlag is aangevallen en zet de waarde gewonnen op true voor die speler
             Daarna wordt hier uitgelezen of zijn status gewonnen is. Zoja dan telt hij er 1 op bij gewonnen en de
             verliezer bij ++ bij verloren. Gamerunning wordt daarna gestopt.
              */
             if (huidigeSpeler.isGewonnen()){
                 gamerunning = false;
+                //Een lijst van alle speelstukken uit het bord om de data op te slaan.
+                List<SpeelStukData> speelStukDataList = speelStukDataService.generateList(spelerBord, spelNaam); // genereer een lijst van speelStukData objecten
 
                 //alle data opslaan
                 //speler die won
                 SpelerData spelerDieWon = spelerDataService.findBySpelerNaam(huidigeSpeler.getSpelerNaam()).get();
                 spelerDieWon.setSpelerWins(spelerDieWon.getSpelerWins()+1);
-                spelerDataService.save(spelerDieWon); //dit update de speler die won in de database, aangezien eerst een speler wordt geladen met een bepaalde id, waarna 1 field wordt veranderd en daarna weer wordt opgeslagen. Omdat de id hetzelfde is wordt de rij in de database opgeslagen i.p.v. een nieuwe rij aangemaakt
+                //spelerDataService.save(spelerDieWon); //dit update de speler die won in de database, aangezien eerst een speler wordt geladen met een bepaalde id, waarna 1 field wordt veranderd en daarna weer wordt opgeslagen. Omdat de id hetzelfde is wordt de rij in de database opgeslagen i.p.v. een nieuwe rij aangemaakt
 
                 //speler die verloor
                 SpelerData spelerDieVerloor = spelerDataService.findBySpelerNaam(vorigeSpeler.getSpelerNaam()).get();
                 spelerDieVerloor.setSpelerLosses(spelerDieVerloor.getSpelerLosses()+1);
+                //spelerDataService.save(spelerDieVerloor);
+
+                // dit loopt over alle speelstukData's en voegt ze toe aan de correcte speler.
+                for (SpeelStukData speelStukData : speelStukDataList) {
+                    if (speelStukData.getTeam() == turn) {
+                        spelerDieWon.addSpeelStukData(speelStukData);
+                    } else {
+                        spelerDieVerloor.addSpeelStukData(speelStukData);
+                    }
+                }
+                speelStukDataService.saveAll(speelStukDataList);
+                spelerDataService.save(spelerDieWon);
                 spelerDataService.save(spelerDieVerloor);
 
                 //het spel zelf
+                spelData.addSpelerData(spelerDieWon);
+                spelData.addSpelerData(spelerDieVerloor);
                 spelDataService.save(spelData);
-
-                //de speelStukData
-                /*
-                Een probleem hierbij is dat we de speelStukData loskoppelen van het bord. dus er moet een functie gemaakt worden die het bord omzet in een lijst van speelStukData objecten.
-                mogelijke oplosssingen:
-                    - de x en y coordinaten bijhouden in Speelstuk tijdens het spelen
-                    - bij het opslaan een lijst van SpeelStukData aanmaken door over het bord te loopen en deze data aan te maken, en dan op te slaan.
-                        - hier kies ik voor /\
-                 */
-                List<SpeelStukData> speelStukDataList = speelStukDataService.generateList(spelerBord, spelNaam); // genereer een lijst van speelStukData objecten
-                speelStukDataService.saveAll(speelStukDataList); //en gebruik dan saveAll om deze op te slaan.
 
                 spelerBord.bordPrinten();
                 System.out.println("Gewonnen: "+ huidigeSpeler);
@@ -134,7 +140,7 @@ public class SpelController {
                     turn = 0;
                 }
             }
-            vorigeSpeler = huidigeSpeler; //Aan het einde van de beurt wordt de huidige speler als vorige speler gezet
+            //vorigeSpeler = huidigeSpeler; //Aan het einde van de beurt wordt de huidige speler als vorige speler gezet
         }
         System.out.println("Het spel is afgelopen");
         spelDataService.save(spelData);

@@ -139,7 +139,7 @@ public class Speler {
         return new List[]{printedNames, speelStukNamen};
     }
 
-    private List<Speelstuk> createteam(int team) {
+    public static List<Speelstuk> createteam(int team) {
         List<Speelstuk> Teamstukken = new ArrayList<>();
         //Elk stuk krijgt een apart object en daarom worden 40 stukken gemaakt hieronder. Deze krijgen allemaal
         //het teamnummer mee zodat er onderscheid gemaakt kan worden.
