@@ -38,4 +38,11 @@ public class SpelerController {
     public void deleteBySpelerNaam(@PathVariable String naam) {
         spelerService.deleteBySpelerNaam(naam);
     }
+
+    @Transactional
+    @DeleteMapping("/id/{id}")
+    public void deleteById(@PathVariable Long id) {spelerService.deleteById(id);}
+
+
+
 }

@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface SpelerRepository extends CrudRepository <SpelerData,Long> {
     Optional<SpelerData> findBySpelerNaam(String name);
     void deleteBySpelerNaam(String naam);
+    void deleteById(Long id);
 }

@@ -2,15 +2,10 @@ package nl.koffiepot.Stratego.api;
 
 import nl.koffiepot.Stratego.model.Bord;
 import nl.koffiepot.Stratego.model.Speler;
-import nl.koffiepot.Stratego.model.data.SpelData;
 import nl.koffiepot.Stratego.model.data.SpelerData;
-import nl.koffiepot.Stratego.service.SpelService;
 import nl.koffiepot.Stratego.service.SpelerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,20 +17,14 @@ public class SpelController {
     @Autowired
     private SpelerService spelerService;
 
-    @Autowired
-    private SpelService spelService;
-
-    private SpelData spelData;
-
     @GetMapping
     public Iterable<SpelerData> getAllPlayers(){
         return spelerService.findAll();
     }
 
-    @GetMapping("/{tempSpelerNaam1}/{tempSpelerNaam2}")
-    public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2){
-        boolean Randomplacement = true;
-        String spelnaam = tempSpelerNaam1 + tempSpelerNaam2;
+    @GetMapping("/{tempSpelerNaam1}/{tempSpelerNaam2}/{randomPlacement}")
+    public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2,@PathVariable String randomPlacement){
+        boolean Randomplacement = Boolean.parseBoolean(randomPlacement);
 
         Speler speler1 = new Speler(tempSpelerNaam1,0);
         Speler speler2 = new Speler(tempSpelerNaam2,1);
@@ -52,8 +41,6 @@ public class SpelController {
         List<Speler> spelers = new ArrayList<>();
         spelers.add(speler1);
         spelers.add(speler2);
-
-        spelData.saveData(spelnaam);
 
 
         int turn = 0;
