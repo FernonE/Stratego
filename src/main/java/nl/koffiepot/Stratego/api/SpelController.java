@@ -34,8 +34,8 @@ public class SpelController {
 
     @GetMapping("/{tempSpelerNaam1}/{tempSpelerNaam2}")
     public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2){
+        clearScreen();
         boolean Randomplacement = true;
-        String spelnaam = tempSpelerNaam1 + tempSpelerNaam2;
 
         Speler speler1 = new Speler(tempSpelerNaam1,0);
         Speler speler2 = new Speler(tempSpelerNaam2,1);
@@ -46,6 +46,7 @@ public class SpelController {
 
         if(!Randomplacement) {
             speler1.zetTeam(spelerBord);
+            clearScreen();
             speler2.zetTeam(spelerBord);
         }
 
@@ -53,26 +54,58 @@ public class SpelController {
         spelers.add(speler1);
         spelers.add(speler2);
 
-        spelData.saveData(spelnaam);
-
 
         int turn = 0;
         boolean gamerunning = true;
 
+        /* Om de naamgeving duidelijk te houden heb ik vorige speler toegevoegd. Als je wint, dan wint natuurlijk
+        de huidige speler. De vorige speler verliest dan logischer wijze. */
+        Speler vorigeSpeler = null;
+
         while (gamerunning) {
-            Speler huidigespeler = spelers.get(turn);
-            spelerBord.bordPrinten(huidigespeler.getSpelerTeam());
-            huidigespeler.beurt(spelerBord);
-            /*
-            if [einde spel] {
-                gamerunning = false
-                speelstukservice.savespeelstukken()
-            }
+            Speler huidigeSpeler = spelers.get(turn);
+            spelerBord.bordPrinten(huidigeSpeler.getSpelerTeam());
+            huidigeSpeler.beurt(spelerBord, huidigeSpeler);
+
+            /* In een aanval wordt gecheckt of de vlag is aangevallen en zet de waarde gewonnen op true voor die speler
+            Daarna wordt hier uitgelezen of zijn status gewonnen is. Zoja dan telt hij er 1 op bij gewonnen en de
+            verliezer bij ++ bij verloren. Gamerunning wordt daarna gestopt.
              */
-            turn++;
-            if (turn == spelers.size()) {
-                turn = 0;
+            if (huidigeSpeler.isGewonnen()){
+                gamerunning = false;
+                SpelerData spelerDieWon = spelerService.findBySpelerNaam(huidigeSpeler.getSpelerNaam()).get();
+                spelerDieWon.setSpelerWins(spelerDieWon.getSpelerWins()+1);
+                spelerService.save(spelerDieWon);
+
+                SpelerData spelerDieVerloor = spelerService.findBySpelerNaam(vorigeSpeler.getSpelerNaam()).get();
+                spelerDieVerloor.setSpelerLosses(spelerDieVerloor.getSpelerLosses()+1);
+                spelerService.save(spelerDieVerloor);
+
+                spelerBord.bordPrinten();
+                System.out.println("Gewonnen: "+ huidigeSpeler);
+                System.out.println("Verloren: "+ vorigeSpeler);
+            } else {
+                clearScreen();
+                turn++;
+                if (turn == spelers.size()) {
+                    turn = 0;
+                }
             }
+            vorigeSpeler = huidigeSpeler; //Aan het einde van de beurt wordt de huidige speler als vorige speler gezet
         }
+        System.out.println("Het spel is afgelopen");
+    }
+
+    public static void clearScreen() {
+        System.out.println("\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"
+                +"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n"+"\n");
     }
 }
