@@ -2,7 +2,7 @@ package nl.koffiepot.Stratego.api;
 
 import nl.koffiepot.Stratego.model.Speelstuk;
 import nl.koffiepot.Stratego.model.data.SpeelStukData;
-import nl.koffiepot.Stratego.service.SpeelStukService;
+import nl.koffiepot.Stratego.service.SpeelStukDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class SpeelStukController {
 
     @Autowired
-    private SpeelStukService speelStukService;
+    private SpeelStukDataService speelStukService;
 
 
     public void saveSpeelStukken(Object[][] speelbord) {

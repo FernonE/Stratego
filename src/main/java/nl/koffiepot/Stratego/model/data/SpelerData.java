@@ -18,6 +18,7 @@ public class SpelerData {
 
     public SpelerData(){}
 
+
     public long getId() {
         return id;
     }

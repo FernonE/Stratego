@@ -1,11 +1,11 @@
 package nl.koffiepot.Stratego.persistance;
 
-import nl.koffiepot.Stratego.model.data.SpelData;
+import nl.koffiepot.Stratego.model.data.SpeelStukData;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SpelRepository extends CrudRepository<SpelData, Long> {
-
-
+public interface SpeelStukDataRepository extends CrudRepository<SpeelStukData, Long> {
+    //een random comment
 }
+
