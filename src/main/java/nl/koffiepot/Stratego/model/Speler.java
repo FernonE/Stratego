@@ -11,6 +11,7 @@ public class Speler {
     private String spelerNaam;
     private int spelerTeam;
     private boolean gewonnen;
+    private boolean saveGame;
 
     //constructor
     public Speler(String spelerNaam, int spelerTeam){
@@ -34,11 +35,16 @@ public class Speler {
         String answer = scanner.nextLine();
         int[] coords = new int[]{0,0};
         try{
-            int ind = answer.indexOf(','); // ik heb deze in de try block gezet. Als iemand ipv coordinaten een string invoert dan wordt deze exception ook gevangen.
-            String first = answer.substring(0,ind);
-            String second = answer.substring(ind+1);
-            coords[0] = Integer.parseInt(first)-1;
-            coords[1] = Integer.parseInt(second)-1;
+            if (answer.equals("save")) {
+                coords[0] = -2;
+                coords[1] = -2;
+            } else {
+                int ind = answer.indexOf(','); // ik heb deze in de try block gezet. Als iemand ipv coordinaten een string invoert dan wordt deze exception ook gevangen.
+                String first = answer.substring(0, ind);
+                String second = answer.substring(ind + 1);
+                coords[0] = Integer.parseInt(first) - 1;
+                coords[1] = Integer.parseInt(second) - 1;
+            }
         } catch (Exception e){
             coords[0] = -1;
             coords[1] = -1;
@@ -61,6 +67,9 @@ public class Speler {
                 System.out.println("Er ging iets mis met het invoeren, probeer het nog een keer");
                 passed = false;
                 continue; //als het misgaat, springt java vanaf hier meteen naar de while(!passed) en slaat de volgende check dus over. Aangezien dat niet gaat :)
+            } else if (selectCoords[0] == -2) {
+                saveGame = true;
+                break; //break to make sure the next if statement doesnt create an ArrayIndexOutOfBounds.
             }
             if(!bord.checkValidPiece(selectCoords[1], selectCoords[0],this.spelerTeam)){ //daarna kijken of het wel een correcte speelstuk is
                 //prints wanneer iets verkeerd gekozen is gebeurt al in bord.
@@ -70,15 +79,17 @@ public class Speler {
 
 
         passed = false; //passed weer op false zetten.
-        do{
-            System.out.println("welke richting wil je deze op bewegen?");
-            System.out.println("selecteer uit up(u), down(d), left(l) of right(r)");
-            //bord.moveChooser vraag al om user input welke richting je op wilt, als dit mogelijk is gebeurt dit ook meteen
-            //is de move ook uitgevoerd, dan komt true eruit, en anders false
-            if (bord.moveChooser(selectCoords[1], selectCoords[0],this)){ //in bord.moveChooser, wordt al gevraagd voor user input in welke richting je wilt bewegen, en wordt dit gedaan waneer het kan.
-                passed = true;
-            }
-        } while (!passed);
+        if (!saveGame) {//als de user save heeft ingetypt, dan moet het spel worden opgeslagen' en deze vraag dus niet worden gesteld.
+            do {
+                System.out.println("welke richting wil je deze op bewegen?");
+                System.out.println("selecteer uit up(u), down(d), left(l) of right(r)");
+                //bord.moveChooser vraag al om user input welke richting je op wilt, als dit mogelijk is gebeurt dit ook meteen
+                //is de move ook uitgevoerd, dan komt true eruit, en anders false
+                if (bord.moveChooser(selectCoords[1], selectCoords[0], this)) { //in bord.moveChooser, wordt al gevraagd voor user input in welke richting je wilt bewegen, en wordt dit gedaan waneer het kan.
+                    passed = true;
+                }
+            } while (!passed);
+        }
     }
 
     // deze methode vraagt de user om omstebeurt een speelstuk op het bord neer te zetten door eerst te vragen op welk coordinaat en daarna welke speelstuk.
@@ -182,6 +193,10 @@ public class Speler {
 
     public void setGewonnen(boolean gewonnen) {
         this.gewonnen = gewonnen;
+    }
+
+    public boolean isSaveGame() {
+        return saveGame;
     }
 
     @Override

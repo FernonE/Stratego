@@ -11,6 +11,7 @@ public class SpelData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String spelNaam;
+    private int currentTurn;
 
     @OneToMany
     private Set<SpelerData> spelerDataSet = new HashSet<>();
@@ -43,5 +44,13 @@ public class SpelData {
 
     public void setSpelNaam(String spelNaam) {
         this.spelNaam = spelNaam;
+    }
+
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
     }
 }
