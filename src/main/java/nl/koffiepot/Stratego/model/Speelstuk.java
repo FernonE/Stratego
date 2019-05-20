@@ -5,24 +5,18 @@ import nl.koffiepot.Stratego.model.Speelstukken.Majoor;
 public class Speelstuk {
     long id;
     private int value;
-    private String naam;
+    private String speelstukNaam;
     private int team;
+    private int xCoordinaat;
+    private int yCoordinaat;
 
 
 
     public Speelstuk(int team,int value, String naam){
         this.team = team;
         this.value = value;
-        this.naam = naam;
+        this.speelstukNaam = naam;
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -46,15 +40,31 @@ public class Speelstuk {
         this.value = value;
     }
 
-    public String getNaam() {
-        return naam;
+    public String getSpeelstukNaam() {
+        return speelstukNaam;
     }
 
-    public void setNaam(String naam) {
-        this.naam = naam;
+    public void setSpeelstukNaam(String speelstukNaam) {
+        this.speelstukNaam = speelstukNaam;
     }
 
     public int getTeam() {
         return team;
+    }
+
+    public int getxCoordinaat() {
+        return xCoordinaat;
+    }
+
+    public void setxCoordinaat(int xCoordinaat) {
+        this.xCoordinaat = xCoordinaat;
+    }
+
+    public int getyCoordinaat() {
+        return yCoordinaat;
+    }
+
+    public void setyCoordinaat(int yCoordinaat) {
+        this.yCoordinaat = yCoordinaat;
     }
 }

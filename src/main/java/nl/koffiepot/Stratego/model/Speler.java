@@ -104,7 +104,7 @@ public class Speler {
                     String answer = scanner.nextLine();
                     if (speelStuknamen.contains(answer)){
                         for(Speelstuk speelstuk : teamlijst){ //en over alle nog te plaatste speelstukken wordt geloopt...
-                            if (speelstuk.getNaam().equals(answer)){ //... Totdat de er een speelstuk is gevonden met dezelfde waarde als die gekozen is (vandaar 2 lijsten)
+                            if (speelstuk.getSpeelstukNaam().equals(answer)){ //... Totdat de er een speelstuk is gevonden met dezelfde waarde als die gekozen is (vandaar 2 lijsten)
                                 bord.setPiece(Coords[1],Coords[0],speelstuk); // dit speelstuk wordt dan op het bord gezet.
                                 teamlijst.remove(speelstuk); //en verwijderd uit de lijst met nog te plaatsen stukken.
                                 break;

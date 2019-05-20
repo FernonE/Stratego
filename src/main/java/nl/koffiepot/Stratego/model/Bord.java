@@ -150,13 +150,13 @@ public class Bord {
         if (speelBord[pionYLocationNew][pionXLocationNew] instanceof Speelstuk) {
             Speelstuk enemy = (Speelstuk) speelBord[pionYLocationNew][pionXLocationNew];
             Speelstuk eigenSpeelstuk = (Speelstuk) speelBord[pionYLocationOld][pionXLocationOld];
-            System.out.println("ATTACK!!!" + '\n' + "Je valt aan met " + eigenSpeelstuk.getNaam());
+            System.out.println("ATTACK!!!" + '\n' + "Je valt aan met " + eigenSpeelstuk.getSpeelstukNaam());
 
             if (eigenSpeelstuk.getValue() >= enemy.getValue()) {
-                System.out.println("Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU WIN!");
+                System.out.println("Je hebt een " + enemy.getSpeelstukNaam() + " aangevallen" + '\n' + "YOU WIN!");
                 speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
             } else if (eigenSpeelstuk.getValue() < enemy.getValue()) {
-                System.out.println( "Je hebt een " + enemy.getNaam() + " aangevallen" + '\n' + "YOU LOST!");
+                System.out.println( "Je hebt een " + enemy.getSpeelstukNaam() + " aangevallen" + '\n' + "YOU LOST!");
             } else {
                 speelBord[pionYLocationNew][pionXLocationNew] = speelBord[pionYLocationOld][pionXLocationOld];
             }

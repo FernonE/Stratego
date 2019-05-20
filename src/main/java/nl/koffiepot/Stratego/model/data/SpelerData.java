@@ -1,11 +1,11 @@
 package nl.koffiepot.Stratego.model.data;
 
+import nl.koffiepot.Stratego.model.Speelstuk;
 import nl.koffiepot.Stratego.model.Speler;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class SpelerData {
@@ -13,10 +13,21 @@ public class SpelerData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String spelerNaam;
     private int spelerWins;
     private int spelerLosses;
+
+    @OneToMany(mappedBy = "speler", cascade=CascadeType.ALL)
+    //@JoinColumn(spel = "naam")
+    private Set<SpeelstukkenData> speelstukken = new HashSet<>();
+    public Set<SpeelstukkenData> getSpeelstukken(){
+        return this.speelstukken;
+    }
+    public void addSpeelstukkenData(SpeelstukkenData speelstuk){
+        this.speelstukken.add(speelstuk);
+    }
+
+
 
 
 

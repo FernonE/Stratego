@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("speler")
+@RequestMapping("api/speler")
 public class SpelerController {
 
     @Autowired
@@ -27,6 +27,7 @@ public class SpelerController {
             return null;
         } //Dit mag eigenlijk niet
     }
+
 
     @GetMapping("/{naam}")
     public Optional<SpelerData> getSpelerByNaam(@PathVariable String naam) {
