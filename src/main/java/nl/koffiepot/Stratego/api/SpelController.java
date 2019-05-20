@@ -62,6 +62,7 @@ public class SpelController {
         spel.newGame(speler1, speler2, Randomplacement);
         spel.doGame();
         spel.saveGame(spelDataService, spelerDataService, speelStukDataService);
+
     }
 
 }
