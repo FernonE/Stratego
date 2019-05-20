@@ -38,6 +38,7 @@ public class SpelController {
         return spelerDataService.findAll();
     }
 
+
     @GetMapping("/start/{tempSpelerNaam1}/{tempSpelerNaam2}/{randomplacement}")
     public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2, @PathVariable String randomplacement) {
         boolean Randomplacement = Boolean.parseBoolean(randomplacement);

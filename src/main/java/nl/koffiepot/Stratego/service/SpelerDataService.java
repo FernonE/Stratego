@@ -28,6 +28,7 @@ public class SpelerDataService {
     public void deleteBySpelerNaam(String naam){
         spelerDataRepository.deleteBySpelerNaam(naam);
     }
+
     public void deleteById(Long aLong) {
         spelerDataRepository.deleteById(aLong);
     }
