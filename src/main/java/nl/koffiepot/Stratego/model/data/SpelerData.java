@@ -1,11 +1,8 @@
 package nl.koffiepot.Stratego.model.data;
 
-import nl.koffiepot.Stratego.model.Speler;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class SpelerData {
@@ -18,7 +15,12 @@ public class SpelerData {
     private int spelerWins;
     private int spelerLosses;
 
+    @OneToMany
+    private Set<SpeelStukData> speelStukDataSet = new HashSet<>();
 
+    public void addSpeelStukData(SpeelStukData speelStukData) {
+        speelStukDataSet.add(speelStukData);
+    }
 
     public SpelerData(){}
 
