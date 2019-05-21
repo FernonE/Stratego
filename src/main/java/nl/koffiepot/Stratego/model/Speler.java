@@ -11,6 +11,7 @@ public class Speler {
     private String spelerNaam;
     private int spelerTeam;
     private boolean gewonnen;
+    private boolean saveGame;
 
     //constructor
     public Speler(String spelerNaam, int spelerTeam){
@@ -34,13 +35,18 @@ public class Speler {
         String answer = scanner.nextLine();
         int[] coords = new int[]{0,0};
         try{
-            int ind = answer.indexOf(','); // ik heb deze in de try block gezet. Als iemand ipv coordinaten een string invoert dan wordt deze exception ook gevangen.
-            String first = answer.substring(0,ind);
-            String second = answer.substring(ind+1);
-            coords[0] = Integer.parseInt(first)-1;
-            coords[1] = Integer.parseInt(second)-1;
-            if (coords[0] < 0 || coords[0] > 9 || coords[1] < 0 || coords[1] > 9) {
-                throw new IndexOutOfBoundsException();
+            if (!answer.equals("save")) {
+                int ind = answer.indexOf(','); // ik heb deze in de try block gezet. Als iemand ipv coordinaten een string invoert dan wordt deze exception ook gevangen.
+                String first = answer.substring(0, ind);
+                String second = answer.substring(ind + 1);
+                coords[0] = Integer.parseInt(first) - 1;
+                coords[1] = Integer.parseInt(second) - 1;
+                if (coords[0] < 0 || coords[0] > 9 || coords[1] < 0 || coords[1] > 9) {
+                    throw new IndexOutOfBoundsException();
+                }
+            }  else {
+                coords[0] = -2;
+                coords[1] = -2;
             }
         } catch (Exception e){
             coords[0] = -1;
@@ -78,19 +84,22 @@ public class Speler {
     }
 
 
-    public void beurt(Bord bord, Speler speler) {
+    public void beurt(Bord bord) {
 
         //in een do while not correct loop zetten
         boolean passed;
         boolean happy; //Als je blij bent met je keuze ga je door anders keer je terug naar kiezen
         //deze wordt aangepast
         int[] selectCoords;
-        do {
+        LOOP: do {
             do {
-                System.out.println(speler.getSpelerNaam() + " is aan zet. Welk speelstuk wil je bewegen? Voer coordinaten in als volgt: x,y"); //Deze vraag hier neergezet
+                System.out.println(this.spelerNaam + " is aan zet. Welk speelstuk wil je bewegen? Voer coordinaten in als volgt: x,y"); //Deze vraag hier neergezet
                 selectCoords = this.selectCoords(); //Vraag om user input om te bepalen welke speelstuk hij/zij wil verzetten. {-1,-1} als het niet goed is, {x, y} als het wel goed is
                 if (selectCoords[0] == -1) { // eerst kijken of de user wel goede input heeft gegeven
                     passed = false;
+                } else if (selectCoords[0]==-2){
+                    saveGame = true;
+                    break LOOP;
                 } else {
                     passed = bord.checkValidPiece(selectCoords[1], selectCoords[0], this.spelerTeam); //returns true if validpiece, but false if it is not valid
                 }
@@ -107,9 +116,11 @@ public class Speler {
                 }
             } while (!passed);
         } while (!happy);
-        bord.bordPrinten(this.spelerTeam);
-        System.out.println("Press enter to continue");
-        scanner.nextLine();
+        if (!saveGame) {
+            bord.bordPrinten(this.spelerTeam);
+            System.out.println("Press enter to continue");
+            scanner.nextLine();
+        }
     }
 
     // deze methode vraagt de user om omstebeurt een speelstuk op het bord neer te zetten door eerst te vragen op welk coordinaat en daarna welke speelstuk.
@@ -212,6 +223,10 @@ public class Speler {
 
     public void setGewonnen(boolean gewonnen) {
         this.gewonnen = gewonnen;
+    }
+
+    public boolean isSaveGame() {
+        return saveGame;
     }
 
     @Override

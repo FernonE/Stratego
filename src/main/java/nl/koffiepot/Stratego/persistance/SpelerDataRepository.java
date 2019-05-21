@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface SpelerRepository extends CrudRepository <SpelerData,Long> {
+public interface SpelerDataRepository extends CrudRepository <SpelerData,Long> {
     Optional<SpelerData> findBySpelerNaam(String name);
     void deleteBySpelerNaam(String naam);
+    void deleteById(Long id);
 }

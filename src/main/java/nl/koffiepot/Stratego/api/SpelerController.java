@@ -1,7 +1,7 @@
 package nl.koffiepot.Stratego.api;
 
 import nl.koffiepot.Stratego.model.data.SpelerData;
-import nl.koffiepot.Stratego.service.SpelerService;
+import nl.koffiepot.Stratego.service.SpelerDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +13,15 @@ import java.util.Optional;
 public class SpelerController {
 
     @Autowired
-    private SpelerService spelerService;
+    private SpelerDataService spelerDataService;
 
     @GetMapping
-    public Iterable<SpelerData> getAllSpeler() {return spelerService.findAll();}
+    public Iterable<SpelerData> getAllSpeler() {return spelerDataService.findAll();}
 
     @PostMapping
-    public SpelerData createSpeler(@RequestBody SpelerData speler) {
-        if (!spelerService.findBySpelerNaam(speler.getSpelerNaam()).isPresent()) {
-            return spelerService.save(speler);
+    public SpelerData createSpeler(@RequestBody SpelerData spelerData) {
+        if (!spelerDataService.findBySpelerNaam(spelerData.getSpelerNaam()).isPresent()) {
+            return spelerDataService.save(spelerData);
         } else {
             System.out.println("Speler bestaat al");
             return null;
@@ -30,12 +30,16 @@ public class SpelerController {
 
     @GetMapping("/{naam}")
     public Optional<SpelerData> getSpelerByNaam(@PathVariable String naam) {
-        return spelerService.findBySpelerNaam(naam);
+        return spelerDataService.findBySpelerNaam(naam);
     }
 
     @Transactional
     @DeleteMapping("/{naam}")
     public void deleteBySpelerNaam(@PathVariable String naam) {
-        spelerService.deleteBySpelerNaam(naam);
+        spelerDataService.deleteBySpelerNaam(naam);
     }
+
+    @Transactional
+    @DeleteMapping("/id/{id}")
+    public void deleteById(@PathVariable Long id) {spelerDataService.deleteById(id);}
 }

@@ -1,35 +1,36 @@
 package nl.koffiepot.Stratego.service;
 
 import nl.koffiepot.Stratego.model.data.SpelerData;
-import nl.koffiepot.Stratego.persistance.SpelerRepository;
+import nl.koffiepot.Stratego.persistance.SpelerDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class SpelerService {
+public class SpelerDataService {
 
     @Autowired
-    private SpelerRepository spelerRepository;
+    private SpelerDataRepository spelerDataRepository;
 
     public SpelerData save(SpelerData speler) {
-        return spelerRepository.save(speler);
+        return spelerDataRepository.save(speler);
     }
 
     public Iterable<SpelerData> findAll() {
-        return spelerRepository.findAll();
+        return spelerDataRepository.findAll();
     }
 
     public Optional<SpelerData> findBySpelerNaam(String name) {
-        return spelerRepository.findBySpelerNaam(name);
+        return spelerDataRepository.findBySpelerNaam(name);
     }
 
     public void deleteBySpelerNaam(String naam){
-        spelerRepository.deleteBySpelerNaam(naam);
+        spelerDataRepository.deleteBySpelerNaam(naam);
     }
+
     public void deleteById(Long aLong) {
-        spelerRepository.deleteById(aLong);
+        spelerDataRepository.deleteById(aLong);
     }
 
 

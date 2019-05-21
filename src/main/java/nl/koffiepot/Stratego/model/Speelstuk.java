@@ -1,7 +1,5 @@
 package nl.koffiepot.Stratego.model;
 
-import nl.koffiepot.Stratego.model.Speelstukken.Majoor;
-
 public class Speelstuk {
     long id;
     private int value;
@@ -9,24 +7,11 @@ public class Speelstuk {
     private int team;
 
 
-
     public Speelstuk(int team,int value, String naam){
         this.team = team;
         this.value = value;
         this.naam = naam;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //Methodes voor het aanmaken
