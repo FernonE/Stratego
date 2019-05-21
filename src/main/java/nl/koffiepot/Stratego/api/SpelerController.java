@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("speler")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SpelerController {
 
     @Autowired
@@ -21,7 +22,10 @@ public class SpelerController {
     @PostMapping
     public SpelerData createSpeler(@RequestBody SpelerData spelerData) {
         if (!spelerDataService.findBySpelerNaam(spelerData.getSpelerNaam()).isPresent()) {
-            return spelerDataService.save(spelerData);
+            if (spelerData.getSpelerNaam() != null)
+                return spelerDataService.save(spelerData);
+            System.out.println("SpelerNaam mag niet null");
+            return null;
         } else {
             System.out.println("Speler bestaat al");
             return null;
@@ -40,6 +44,6 @@ public class SpelerController {
     }
 
     @Transactional
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {spelerDataService.deleteById(id);}
 }
