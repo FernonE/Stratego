@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping()
 public class SpelController {
 
     @Autowired
@@ -63,7 +62,6 @@ public class SpelController {
         spel.newGame(speler1, speler2, Randomplacement);
         spel.doGame();
         spel.saveGame(spelDataService, spelerDataService, speelStukDataService);
-
     }
 
 }

@@ -19,9 +19,9 @@ public class SpelerController {
     public Iterable<SpelerData> getAllSpeler() {return spelerDataService.findAll();}
 
     @PostMapping
-    public SpelerData createSpeler(@RequestBody SpelerData speler) {
-        if (!spelerDataService.findBySpelerNaam(speler.getSpelerNaam()).isPresent()) {
-            return spelerDataService.save(speler);
+    public SpelerData createSpeler(@RequestBody SpelerData spelerData) {
+        if (!spelerDataService.findBySpelerNaam(spelerData.getSpelerNaam()).isPresent()) {
+            return spelerDataService.save(spelerData);
         } else {
             System.out.println("Speler bestaat al");
             return null;
@@ -41,5 +41,5 @@ public class SpelerController {
 
     @Transactional
     @DeleteMapping("/id/{id}")
-    public void deleteById(@PathVariable Long id) {spelerService.deleteById(id);}
+    public void deleteById(@PathVariable Long id) {spelerDataService.deleteById(id);}
 }

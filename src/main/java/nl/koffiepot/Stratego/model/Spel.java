@@ -99,6 +99,12 @@ public class Spel {
         spelData.addSpelerData(spelerDieWon);
         spelData.addSpelerData(spelerDieVerloor);
         spelDataService.save(spelData);
+
+        spelBord.bordPrinten();
+
+        System.out.println("Gewonnen: "+ huidigeSpeler);
+        System.out.println("Verloren: "+ vorigeSpeler);
+        System.out.println("Het spel is afgelopen");
     }
 
     private List<SpeelStukData> generateList(Bord spelBord, String spelNaam) {
