@@ -1,0 +1,8 @@
+<input type="text" [(ngModel)]="myText" placeholder="vul naam in">
+
+<button (click)="onClick()">OK</button> {{myText}} {{testMyText}} {{speler | json}
+
+<ul>
+    <li *ngFor="let msg of speler"> //for loop\\ {{msg.text}}
+    </li>
+</ul>

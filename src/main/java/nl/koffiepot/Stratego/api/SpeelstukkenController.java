@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/speelstukken")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SpeelstukkenController{
 
     private SpelerService spelerService;
