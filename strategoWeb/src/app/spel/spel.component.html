@@ -1,84 +1,109 @@
-<p align="center">
-  <input type="text" [(ngModel)]="speler1" placeholder="Speler 1">
-  <input type="text" [(ngModel)]="speler2" placeholder="Speler 2">
-  <button (click)="onClickStartSpel()">START</button>
-  <br>
-  {{speler1}} {{speler2}}
+<p>
+    Voer hier naam van speler 1 in:
+    <input type="text" [(ngModel)]="speler1" placeholder="Speler 1">
+    <br> Voer hier naam van speler 2 in:
+    <input type="text" [(ngModel)]="speler2" placeholder="Speler 2">
 
-  <!--<button (click)="onClickBord()">BORD</button>-->
+    <!--<button (click)="onClickBord()">BORD</button>-->
 
-  {{bord |json}}
+    {{bord |json}}
 </p>
 
-<p align="center">
-    <input type="text" [(ngModel)]="huidigespeler" placeholder="Kies de speler die aan zet is">
+<h1 class="text-center">
     <br>
+    <button class="btn btn-warning btn-lg" (click)="onClickStartSpel()">START GAME</button>
+    <br> {{speler1}} {{speler2}}
+    <br>
+</h1>
+
+<aside class="text-center">
+
+    Voer hier je naam in:
+    <input type="text" [(ngModel)]="huidigespeler" placeholder="Speler aan zet">
+    <br> Voer hier x-coordinaat in:
     <input type="text" [(ngModel)]="kiezenxcoordinate" placeholder="xcoordinate">
+    <br> Voer hier y-coordinaat in:
     <input type="text" [(ngModel)]="kiezenycoordinate" placeholder="ycoordinate">
-</p>
+    <br>
+</aside>
 
 
+<br>
 <table align="center">
-  <tr>
-    <td></td><td align="center"><button (click)="onClickNaarBoven()">Up</button></td><td></td>
-  </tr>
-  <tr>
-    <td align="center"><button (click)="onClickNaarLinks()">Left</button></td><td align="center"><button (click)="onClickNaarBeneden()">Down</button></td><td align="center"><button (click)="onClickNaarRechts()">Right</button></td>
-  </tr>
+    <tr>
+        <td></td>
+        <td align="center"><button (click)="onClickNaarBoven()" class="btn btn-light">Up</button></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td align="center"><button (click)="onClickNaarLinks()" class="btn btn-light">Left</button></td>
+        <td align="center"><button (click)="onClickNaarBeneden()" class="btn btn-light">Down</button></td>
+        <td align="center"><button (click)="onClickNaarRechts()" class="btn btn-light">Right</button></td>
+    </tr>
 </table>
 
-  <table border align="center" >
+
+
+<table border align="center">
     <tr *ngFor="let row of array">
-      <td *ngFor="let element of row">
-        <img class="bord" src={{element}} > 
-      </td>     
+        <td *ngFor="let element of row">
+            <img class="bord" src={{element}}>
+        </td>
     </tr>
-  </table>
+</table>
 
-  <br>
-  <table class="table table-striped" border align="center">
+<br>
+<table class=".table-striped" border align="center">
     <tr>
-      <td>vlag</td><td>bom</td><td>spy</td><td>scout</td><td>miner</td><td>sergeant</td><td>lieutenant</td><td>captain</td><td>major</td><td>colonel</td><td>general</td><td>marshal</td>
+        <td>&nbsp;&nbsp;vlag&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;bom&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;spy&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;scout&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;miner&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;sergeant&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;lieutenant&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;captain&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;major&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;colonel&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;general&nbsp;&nbsp;</td>
+        <td> &nbsp;&nbsp;marshal&nbsp;&nbsp;</td>
     </tr>
     <tr>
-      <td>
-          <img class="bord" src="./assets/stratego-flag.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-bomb.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-spy.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-scout.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-miner.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-sergeant.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-lieutenant.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-captain.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-major.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-colonel.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-general.svg" > 
-      </td>
-      <td>
-          <img class="bord" src="./assets/stratego-marshal.svg" > 
-      </td>
+        <td>
+            <img class="bord" src="./assets/stratego-flag.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-bomb.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-spy.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-scout.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-miner.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-sergeant.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-lieutenant.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-captain.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-major.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-colonel.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-general.svg">
+        </td>
+        <td>
+            <img class="bord" src="./assets/stratego-marshal.svg">
+        </td>
     </tr>
-  </table>
-
-
-
+</table>

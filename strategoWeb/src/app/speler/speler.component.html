@@ -1,24 +1,28 @@
-
-
 <!--<p>
   <button (click)="onClickGet()">GET</button>
 </p>-->
 
-<p align="center">
+<p>Vul je naam hieronder in om een speler aan te maken.</p>
+<p class="text-left">
     <input type="text" [(ngModel)]="spelerNaam" placeholder="Naam">
-    <button (click)="onClickSend()">Maak speler</button>
+    <button class="btn btn-primary" (click)="onClickSend()">Maak speler</button>
     <br>
 </p>
 
-
-<table border align="center">
-  <tr><td>Spelernaam</td><td>Speler wins</td><td>Speler losses</td></tr>
-    <tr *ngFor="let speler of spelers">
-      <td>{{speler.spelerNaam}}</td><td>{{speler.spelerWins}}</td><td>{{speler.spelerLosses}}</td>
-    </tr>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Naam van speler</th>
+            <th scope="col">Aantal keer gewonnen</th>
+            <th scope="col">Aantal keer verloren</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let speler of spelers">
+            <th scope="row">1</th>
+            <td>{{speler.spelerNaam}}</td>
+            <td>{{speler.spelerWins}}</td>
+            <td>{{speler.spelerLosses}}</td>
+        </tr>
+    </tbody>
 </table>
-
-
-
-
-

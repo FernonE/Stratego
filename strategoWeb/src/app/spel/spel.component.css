@@ -1,11 +1,12 @@
-.bord{
+.bord {
     width: 50px
 }
 
-.center{
-    margin-left:auto; 
-    margin-right:auto;
-  }
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
 
-
- 
+h1 {
+    background-color: lightblue;
+}
