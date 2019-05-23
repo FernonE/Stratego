@@ -122,6 +122,15 @@ public class Spel {
         return speelStukDataList;
     }
 
+
+    public void frontEndBeurt(int xcoordinate, int ycoordinate, String direction, String spelernaam, Speler speler1, Speler speler2) {
+        if (speler1.getSpelerNaam().equals(spelernaam)) {
+            speler1.frondEndBeurt(xcoordinate, ycoordinate, direction, spelBord);
+        } else {
+            speler2.frondEndBeurt(xcoordinate, ycoordinate, direction, spelBord);
+        }
+    }
+
     public void clearScreen() {
         System.out.println("\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n"
                 + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n" + "\n"
@@ -160,4 +169,5 @@ public class Spel {
     public void setSpelBord(Bord spelBord) {
         this.spelBord = spelBord;
     }
+
 }

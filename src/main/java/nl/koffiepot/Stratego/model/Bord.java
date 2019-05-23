@@ -181,6 +181,41 @@ public class Bord {
 
 
 
+    public boolean FrondEndMove(int pionXLocation, int pionYLocation, String direction, Speler speler) {
+        switch (direction) {
+            case "u":
+                //Check of hij wel in deze richting kan bewegen, zo ja: voer move uit, zo nee: nieuwe input vragen
+                if (movementCheck(pionYLocation - 1, pionXLocation, true, speler.getSpelerTeam())) {
+                    movePiece(pionYLocation - 1, pionXLocation, pionYLocation, pionXLocation, speler);
+                    return true;
+                } else {
+                    return false;
+                }
+            case "d":
+                if (movementCheck(pionYLocation + 1, pionXLocation, true, speler.getSpelerTeam())) {
+                    movePiece(pionYLocation + 1, pionXLocation, pionYLocation, pionXLocation, speler);
+                    return true;
+                } else {
+                    return false;
+                }
+            case "r":
+                if (movementCheck(pionYLocation, pionXLocation + 1, true, speler.getSpelerTeam())) {
+                    movePiece(pionYLocation, pionXLocation + 1, pionYLocation, pionXLocation, speler);
+                    return true;
+                } else {
+                    return false;
+                }
+            case "l":
+                if (movementCheck(pionYLocation, pionXLocation - 1, true, speler.getSpelerTeam())) {
+                    movePiece(pionYLocation, pionXLocation - 1, pionYLocation, pionXLocation, speler);
+                    return true;
+                } else {
+                    return false;
+                }
+            default:
+                return false;
+        }
+    }
 
     //methode om movement te kiezen en te checken
 
@@ -345,6 +380,7 @@ public class Bord {
     }
 
 
+
     //getters and setter
     public long getId() {
         return id;
@@ -365,6 +401,7 @@ public class Bord {
     public Object[][] getSpeelBord() {
         return speelBord;
     }
+
 }
 
 

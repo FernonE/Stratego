@@ -39,6 +39,29 @@ public class SpelController {
         return spelerDataService.findAll();
     }
 
+    @GetMapping("/beurt/{xcoordinate}/{ycoordinate}/{direction}/{spelernaam}")
+    public List<SpeelStukData> frontEndBeurt(@PathVariable int xcoordinate, @PathVariable int ycoordinate, @PathVariable String direction, @PathVariable String spelernaam){
+        spel.frontEndBeurt(xcoordinate, ycoordinate, direction, spelernaam, speler1, speler2);
+
+        Object[][] speelbord = spel.getSpelBord().getSpeelBord();
+        java.util.List<SpeelStukData> speelStukken = new ArrayList<>();
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (speelbord[y][x] instanceof Speelstuk) {
+                    Speelstuk speelstukOpBord = (Speelstuk) speelbord[y][x];
+                    SpeelStukData opTeSlaanStuk = new SpeelStukData();
+                    opTeSlaanStuk.setSpelNaam("een spelnaam");
+                    opTeSlaanStuk.setTeam(speelstukOpBord.getTeam());
+                    opTeSlaanStuk.setValue(speelstukOpBord.getValue());
+                    opTeSlaanStuk.setXcoordinate(x);
+                    opTeSlaanStuk.setYcoordinate(y);
+                    speelStukken.add(opTeSlaanStuk);
+                }
+            }
+        }
+        return speelStukken;
+    }
+
 
     @GetMapping("/start/{tempSpelerNaam1}/{tempSpelerNaam2}/{randomplacement}")
     public void startSpel(@PathVariable String tempSpelerNaam1, @PathVariable String tempSpelerNaam2, @PathVariable String randomplacement) {
@@ -84,9 +107,6 @@ public class SpelController {
                 }
             }
         }
-        System.out.println(speelStukken.get(0).getXcoordinate());
-        System.out.println(speelStukken.get(0).getYcoordinate());
-        System.out.println(speelStukken.get(0).getValue());
         return speelStukken;
     }
 }

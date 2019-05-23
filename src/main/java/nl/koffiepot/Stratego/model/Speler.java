@@ -123,6 +123,14 @@ public class Speler {
         }
     }
 
+
+    public void frondEndBeurt(int xcoordinate, int ycoordinate, String direction, Bord bord) {
+        boolean validpiece = bord.checkValidPiece(ycoordinate, xcoordinate, this.spelerTeam);
+        if (validpiece){
+            bord.FrondEndMove(xcoordinate, ycoordinate, direction, this);
+        }
+    }
+
     // deze methode vraagt de user om omstebeurt een speelstuk op het bord neer te zetten door eerst te vragen op welk coordinaat en daarna welke speelstuk.
     public void zetTeam(Bord bord){
         List<Speelstuk> teamlijst = createteam(this.spelerTeam);
@@ -236,4 +244,5 @@ public class Speler {
                 ", spelerTeam=" + spelerTeam +
                 '}';
     }
+
 }
