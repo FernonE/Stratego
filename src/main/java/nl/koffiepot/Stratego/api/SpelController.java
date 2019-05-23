@@ -3,6 +3,7 @@ package nl.koffiepot.Stratego.api;
 import nl.koffiepot.Stratego.model.Speelstuk;
 import nl.koffiepot.Stratego.model.Spel;
 import nl.koffiepot.Stratego.model.Speler;
+import nl.koffiepot.Stratego.model.data.FrontEndGameData;
 import nl.koffiepot.Stratego.model.data.SpeelStukData;
 import nl.koffiepot.Stratego.model.data.SpelData;
 import nl.koffiepot.Stratego.model.data.SpelerData;
@@ -33,6 +34,7 @@ public class SpelController {
     private Speler speler1;
     private Speler speler2;
     private Spel spel = new Spel();
+    private FrontEndGameData frontEndGameData = new FrontEndGameData();
 
     @GetMapping
     public Iterable<SpelerData> getAllPlayers(){
@@ -40,7 +42,7 @@ public class SpelController {
     }
 
     @GetMapping("/beurt/{xcoordinate}/{ycoordinate}/{direction}/{spelernaam}")
-    public List<Object> frontEndBeurt(@PathVariable int xcoordinate, @PathVariable int ycoordinate, @PathVariable String direction, @PathVariable String spelernaam){
+    public FrontEndGameData frontEndBeurt(@PathVariable int xcoordinate, @PathVariable int ycoordinate, @PathVariable String direction, @PathVariable String spelernaam){
         spel.frontEndBeurt(xcoordinate, ycoordinate, direction, spelernaam, speler1, speler2);
 
         return this.getBord();
@@ -75,8 +77,7 @@ public class SpelController {
     }
 
     @GetMapping("/bordprinten")
-    public List<Object> getBord() {
-        List<Object> data = new ArrayList<>();
+    public FrontEndGameData getBord() {
         Object[][] speelbord = spel.getSpelBord().getSpeelBord();
         List<SpeelStukData> speelStukken = new ArrayList<>();
         for (int y = 0; y < 10; y++) {
@@ -93,9 +94,7 @@ public class SpelController {
                 }
             }
         }
-        data.add(speelStukken);
-        data.add(spel.getTurn());
-        data.add(spel.getGameRunnig());
-        return data;
+        frontEndGameData.setAll(speelStukken, spel.getTurn(), spel.getGameRunnig());
+        return frontEndGameData;
     }
 }
