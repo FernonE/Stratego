@@ -40,26 +40,11 @@ public class SpelController {
     }
 
     @GetMapping("/beurt/{xcoordinate}/{ycoordinate}/{direction}/{spelernaam}")
-    public List<SpeelStukData> frontEndBeurt(@PathVariable int xcoordinate, @PathVariable int ycoordinate, @PathVariable String direction, @PathVariable String spelernaam){
+    public List<Object> frontEndBeurt(@PathVariable int xcoordinate, @PathVariable int ycoordinate, @PathVariable String direction, @PathVariable String spelernaam){
         spel.frontEndBeurt(xcoordinate, ycoordinate, direction, spelernaam, speler1, speler2);
 
-        Object[][] speelbord = spel.getSpelBord().getSpeelBord();
-        java.util.List<SpeelStukData> speelStukken = new ArrayList<>();
-        for (int y = 0; y < 10; y++) {
-            for (int x = 0; x < 10; x++) {
-                if (speelbord[y][x] instanceof Speelstuk) {
-                    Speelstuk speelstukOpBord = (Speelstuk) speelbord[y][x];
-                    SpeelStukData opTeSlaanStuk = new SpeelStukData();
-                    opTeSlaanStuk.setSpelNaam("een spelnaam");
-                    opTeSlaanStuk.setTeam(speelstukOpBord.getTeam());
-                    opTeSlaanStuk.setValue(speelstukOpBord.getValue());
-                    opTeSlaanStuk.setXcoordinate(x);
-                    opTeSlaanStuk.setYcoordinate(y);
-                    speelStukken.add(opTeSlaanStuk);
-                }
-            }
-        }
-        return speelStukken;
+        return this.getBord();
+
     }
 
 
@@ -85,12 +70,13 @@ public class SpelController {
         System.out.println(speler2);
 
         spel.newGame(speler1, speler2, Randomplacement);
-        spel.doGame();
+        //spel.doGame();
         spel.saveGame(spelDataService, spelerDataService, speelStukDataService);
     }
 
     @GetMapping("/bordprinten")
-    public List<SpeelStukData> getBord() {
+    public List<Object> getBord() {
+        List<Object> data = new ArrayList<>();
         Object[][] speelbord = spel.getSpelBord().getSpeelBord();
         List<SpeelStukData> speelStukken = new ArrayList<>();
         for (int y = 0; y < 10; y++) {
@@ -107,6 +93,9 @@ public class SpelController {
                 }
             }
         }
-        return speelStukken;
+        data.add(speelStukken);
+        data.add(spel.getTurn());
+        data.add(spel.getGameRunnig());
+        return data;
     }
 }
