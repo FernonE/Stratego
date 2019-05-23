@@ -126,9 +126,11 @@ public class Spel {
     public void frontEndBeurt(int xcoordinate, int ycoordinate, String direction, String spelernaam, Speler speler1, Speler speler2) {
         if (speler1.getSpelerNaam().equals(spelernaam)) {
             speler1.frondEndBeurt(xcoordinate, ycoordinate, direction, spelBord);
-        } else {
+        } else if (speler2.getSpelerNaam().equals(spelernaam)){
             speler2.frondEndBeurt(xcoordinate, ycoordinate, direction, spelBord);
         }
+        if (turn == 0) turn = 1;
+        if (turn == 1) turn = 0;
     }
 
     public void clearScreen() {
@@ -168,6 +170,14 @@ public class Spel {
 
     public void setSpelBord(Bord spelBord) {
         this.spelBord = spelBord;
+    }
+
+    public int getTurn(){
+        return turn;
+    }
+
+    public boolean getGameRunnig(){
+        return gamerunning;
     }
 
 }
