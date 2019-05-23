@@ -4,11 +4,13 @@ import { FormsModule} from '@angular/forms'
 import { AppComponent } from './app.component';
 import { SpelerComponent } from './speler/speler.component';
 import { HttpClientModule} from '@angular/common/http';
+import { SpelComponent } from './spel/spel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SpelerComponent
+    SpelerComponent,
+    SpelComponent
   ],
   imports: [
     BrowserModule,

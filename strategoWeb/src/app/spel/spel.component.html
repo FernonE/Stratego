@@ -1,0 +1,69 @@
+<p>
+  <input type="text" [(ngModel)]="speler1" placeholder="Speler 1">
+  <input type="text" [(ngModel)]="speler2" placeholder="Speler 2">
+  <button (click)="onClickStartSpel()">START</button>
+  <br>
+  {{speler1}} {{speler2}}
+
+  <button (click)="onClickBord()">BORD</button>
+
+  {{bord |json}}
+</p>
+
+
+
+
+  <table border>
+    <tr *ngFor="let row of array">
+      <td *ngFor="let element of row">
+        <img class="bord" src={{element}} > 
+      </td>     
+    </tr>
+  </table>
+
+  <table border>
+    <tr>
+      <td>vlag</td><td>bom</td><td>spy</td><td>scout</td><td>miner</td><td>sergeant</td><td>lieutenant</td><td>captain</td><td>major</td><td>colonel</td><td>general</td><td>marshal</td>
+    </tr>
+    <tr>
+      <td>
+          <img class="bord" src="./assets/stratego-flag.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-bomb.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-spy.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-scout.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-miner.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-sergeant.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-lieutenant.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-captain.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-major.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-colonel.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-general.svg" > 
+      </td>
+      <td>
+          <img class="bord" src="./assets/stratego-marshal.svg" > 
+      </td>
+    </tr>
+  </table>
+
+
+

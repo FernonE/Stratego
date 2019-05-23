@@ -266,6 +266,42 @@ public class Bord {
         System.out.println(bordstring);
     }
 
+    public String bordPrinten2(){
+        StringBuilder bordstring = new StringBuilder();
+        bordstring.append("X: | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |10 | \n"); //deze coordinaten worden geprint boven het bord
+        bordstring.append("   -----------------------------------------\n"); // dit is een afscheiding van coordinaten tov gevulde matrix
+        bordstring.append("Y: +---+---+---+---+---+---+---+---+---+---+\n");
+        for (int y = 0; y < 10; y++) {
+            int yCoordinaat = y + 1;//deze y-coordinaat wordt gedefinieerd zodat deze geprint kan worden als coordinatenstelsel
+            if (yCoordinaat < 10) {
+                bordstring.append(" ");//getallen kleiner dan 10, krijgen extra spatie (voor uitlijning)
+            }
+            bordstring.append(yCoordinaat + " ");
+            for (int x = 0; x < 10; x++) { //deze forloop voegt voor ieder vakje de value van het spelstuk toe of een "o" als het vakje leeg is.
+                String spelstukString;
+                if (speelBord[y][x] instanceof Speelstuk) {
+                    Speelstuk speelstuk = (Speelstuk) speelBord[y][x];
+                    if (speelstuk.getValue() < 10) {
+                        spelstukString = "| " + speelstuk.getValue() + " "; //een extra spatie toevoegen als de waarde kleiner is dan tien, zodat de uitlijning mooi klopt.
+                    } else {
+                        spelstukString = "|" + speelstuk.getValue() + " ";
+                    }
+
+                } else if (speelBord[y][x] instanceof Blokkade) { //Als er een String wordt gevonden dan is het een blokkade
+                    spelstukString = "| x ";
+                } else { //Leeg stuk ruimte waar heen gelopen kan worden
+                    spelstukString = "|   ";
+                }
+                bordstring.append(spelstukString);
+            }
+            bordstring.append("|\n");//Aan het einde komt nog een rechtstreepje en dan een niewline character
+            bordstring.append("   +---+---+---+---+---+---+---+---+---+---+\n");
+        }
+
+
+        return bordstring.toString();
+    }
+
 
 
     //met onderstaande methode wordt het bord geprint teamspecifiek, je geeft dan het team mee in de methode

@@ -1,21 +1,23 @@
 package nl.koffiepot.Stratego.api;
 
+import nl.koffiepot.Stratego.model.Speelstuk;
 import nl.koffiepot.Stratego.model.Spel;
 import nl.koffiepot.Stratego.model.Speler;
+import nl.koffiepot.Stratego.model.data.SpeelStukData;
 import nl.koffiepot.Stratego.model.data.SpelData;
 import nl.koffiepot.Stratego.model.data.SpelerData;
 import nl.koffiepot.Stratego.service.SpeelStukDataService;
 import nl.koffiepot.Stratego.service.SpelDataService;
 import nl.koffiepot.Stratego.service.SpelerDataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class SpelController {
 
     @Autowired
@@ -64,4 +66,27 @@ public class SpelController {
         spel.saveGame(spelDataService, spelerDataService, speelStukDataService);
     }
 
+    @GetMapping("/bordprinten")
+    public List<SpeelStukData> getBord() {
+        Object[][] speelbord = spel.getSpelBord().getSpeelBord();
+        List<SpeelStukData> speelStukken = new ArrayList<>();
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (speelbord[y][x] instanceof Speelstuk) {
+                    Speelstuk speelstukOpBord = (Speelstuk) speelbord[y][x];
+                    SpeelStukData opTeSlaanStuk = new SpeelStukData();
+                    opTeSlaanStuk.setSpelNaam("een spelnaam");
+                    opTeSlaanStuk.setTeam(speelstukOpBord.getTeam());
+                    opTeSlaanStuk.setValue(speelstukOpBord.getValue());
+                    opTeSlaanStuk.setXcoordinate(x);
+                    opTeSlaanStuk.setYcoordinate(y);
+                    speelStukken.add(opTeSlaanStuk);
+                }
+            }
+        }
+        System.out.println(speelStukken.get(0).getXcoordinate());
+        System.out.println(speelStukken.get(0).getYcoordinate());
+        System.out.println(speelStukken.get(0).getValue());
+        return speelStukken;
+    }
 }
