@@ -1,19 +1,34 @@
-<p>
+<p align="center">
   <input type="text" [(ngModel)]="speler1" placeholder="Speler 1">
   <input type="text" [(ngModel)]="speler2" placeholder="Speler 2">
   <button (click)="onClickStartSpel()">START</button>
   <br>
   {{speler1}} {{speler2}}
 
-  <button (click)="onClickBord()">BORD</button>
+  <!--<button (click)="onClickBord()">BORD</button>-->
 
   {{bord |json}}
 </p>
 
+<p align="center">
+    <input type="text" [(ngModel)]="huidigespeler" placeholder="Kies de speler die aan zet is">
+    <br>
+    <input type="text" [(ngModel)]="kiezenxcoordinate" placeholder="xcoordinate">
+    <input type="text" [(ngModel)]="kiezenycoordinate" placeholder="ycoordinate">
+</p>
 
 
+<table align="center">
+  <tr>
+    <td></td><td align="center"><button (click)="onClickNaarBoven()">Up</button></td><td></td>
+  </tr>
+  <tr>
+    <td align="center"><button (click)="onClickNaarLinks()">Left</button></td><td align="center"><button (click)="onClickNaarBeneden()">Down</button></td><td align="center"><button (click)="onClickNaarRechts()">Right</button></td>
+  </tr>
+</table>
 
-  <table border>
+
+  <table border align="center" >
     <tr *ngFor="let row of array">
       <td *ngFor="let element of row">
         <img class="bord" src={{element}} > 
@@ -21,7 +36,9 @@
     </tr>
   </table>
 
-  <table border>
+  <br>
+
+  <table border align="center">
     <tr>
       <td>vlag</td><td>bom</td><td>spy</td><td>scout</td><td>miner</td><td>sergeant</td><td>lieutenant</td><td>captain</td><td>major</td><td>colonel</td><td>general</td><td>marshal</td>
     </tr>

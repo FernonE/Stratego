@@ -1,23 +1,24 @@
-<p>
-  <input type="text" [(ngModel)]="spelerNaam" placeholder="Naam">
-  <button (click)="onClickSend()">SEND</button>
-  <br>
-</p>
 
-<p>
+
+<!--<p>
   <button (click)="onClickGet()">GET</button>
+</p>-->
+
+<p align="center">
+    <input type="text" [(ngModel)]="spelerNaam" placeholder="Naam">
+    <button (click)="onClickSend()">Maak speler</button>
+    <br>
 </p>
 
 
+<table border align="center">
+  <tr><td>Spelernaam</td><td>Speler wins</td><td>Speler losses</td></tr>
+    <tr *ngFor="let speler of spelers">
+      <td>{{speler.spelerNaam}}</td><td>{{speler.spelerWins}}</td><td>{{speler.spelerLosses}}</td>
+    </tr>
+</table>
 
-<ul>
-  <table border>
-    <tr><td>Spelernaam</td><td>Speler wins</td><td>Speler losses</td></tr>
-      <tr *ngFor="let speler of spelers">
-        <td>{{speler.spelerNaam}}</td><td>{{speler.spelerWins}}</td><td>{{speler.spelerLosses}}</td>
-      </tr>
-  </table>
-</ul>
+
 
 
 

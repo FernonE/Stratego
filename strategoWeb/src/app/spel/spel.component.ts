@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SpelService } from '../spel.service';
+import { SpelerComponent } from '../speler/speler.component';
+import { SpelerData } from '../speler-data';
 
 @Component({
   selector: 'app-spel',
@@ -13,20 +15,41 @@ export class SpelComponent implements OnInit {
   ngOnInit() {
   }
 
-  array = Array(10).fill(0).map(() => Array(10).fill(0));
+  array = Array(10).fill("./assets/empty.png").map(() => Array(10).fill("./assets/empty.png"));
   
 
   speler1
   speler2
   stringSpeler
   speelStukken
+  beurtURL
+  kiezenxcoordinate
+  kiezenycoordinate
+  huidigespeler
 
-  
+  onClickNaarBoven(){
+    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/u/"+this.huidigespeler
+    this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
+  }
+
+  onClickNaarBeneden(){
+    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/d/"+this.huidigespeler
+    this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
+  }
+
+  onClickNaarLinks(){
+    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/l/"+this.huidigespeler
+    this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
+  }
+
+  onClickNaarRechts(){
+    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/r/"+this.huidigespeler
+    this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
+  }
 
   onClickStartSpel(){
     this.stringSpeler = "http://localhost:8080/start/"+this.speler1+"/"+this.speler2+"/true"
-    this.spelService.getStart(this.stringSpeler).subscribe()
-
+    this.spelService.getStart(this.stringSpeler).subscribe(() => this.onClickBord())
     
   }
 
@@ -38,7 +61,7 @@ export class SpelComponent implements OnInit {
   }
 
   fillBord(){
-    this.array = Array(11).fill(0).map(() => Array(11).fill(0));
+    this.array = Array(11).fill("./assets/empty.png").map(() => Array(11).fill("./assets/empty.png"));
  
     this.array[0][0] = "./assets/yx.png"
     this.array[0][1] = "./assets/1.png"
@@ -72,7 +95,6 @@ export class SpelComponent implements OnInit {
     this.array[6][8] = "./assets/blokkade.png"
 
     for (let speelStukData of this.speelStukken){
-      console.log(speelStukData.xcoordinate+" "+speelStukData.ycoordinate+" "+speelStukData.value)
       if (speelStukData.value == 1) this.array [speelStukData.ycoordinate+1][speelStukData.xcoordinate+1] = "./assets/stratego-spy.svg";
       if (speelStukData.value == 2) this.array [speelStukData.ycoordinate+1][speelStukData.xcoordinate+1] = "./assets/stratego-scout.svg";
       if (speelStukData.value == 3) this.array [speelStukData.ycoordinate+1][speelStukData.xcoordinate+1] = "./assets/stratego-miner.svg";

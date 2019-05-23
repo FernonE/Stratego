@@ -13,6 +13,7 @@ export class SpelerComponent implements OnInit {
   constructor(private spelerService: SpelerService) { }
 
   ngOnInit() {
+    this.onClickGet()
   }
 
   spelerNaam
@@ -20,8 +21,7 @@ export class SpelerComponent implements OnInit {
   spelers
 
   onClickSend(){
-    this.spelerService.sendSpeler(this.spelerNaam)
-    this.onClickGet()
+    this.spelerService.sendSpeler(this.spelerNaam).subscribe(() => this.onClickGet())
   }
 
   onClickGet(){

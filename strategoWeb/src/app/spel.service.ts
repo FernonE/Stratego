@@ -8,6 +8,10 @@ export class SpelService {
 
   constructor(private http: HttpClient) { }
 
+  getBeurt(beurtURL){
+    console.log("Ik wil een beurt uitvoeren")
+    return this.http.get(beurtURL)
+  }
 
   getStart(startURL){
     console.log("Ik probeer een spel te starten in de console")

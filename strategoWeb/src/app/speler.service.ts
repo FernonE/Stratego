@@ -21,6 +21,6 @@ export class SpelerService {
     console.log("Ik ga nu een speler toevoegen groetjes fernon")
     this.speler = new SpelerData; 
     this.speler.spelerNaam = spelerNaam
-    this.http.post("http://localhost:8080/speler",this.speler).subscribe()
+    return this.http.post("http://localhost:8080/speler",this.speler)
   }
 }
