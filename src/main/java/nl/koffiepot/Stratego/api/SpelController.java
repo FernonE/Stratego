@@ -42,7 +42,7 @@ public class SpelController {
     }
 
     @GetMapping("/beurt/{xcoordinate}/{ycoordinate}/{direction}/{spelernaam}")
-    public FrontEndGameData frontEndBeurt(@PathVariable int xcoordinate, @PathVariable int ycoordinate, @PathVariable String direction, @PathVariable String spelernaam){
+    public List<SpeelStukData> frontEndBeurt(@PathVariable int xcoordinate, @PathVariable int ycoordinate, @PathVariable String direction, @PathVariable String spelernaam){
         spel.frontEndBeurt(xcoordinate, ycoordinate, direction, spelernaam, speler1, speler2);
 
         return this.getBord();
@@ -62,6 +62,7 @@ public class SpelController {
             speler1 = new Speler("unnamed 1" , 0); // als de speler niet bestaat, maak dan een temporary speler
         }
 
+
         Optional<SpelerData> speler2Data = spelerDataService.findBySpelerNaam(tempSpelerNaam2);
         if (speler2Data.isPresent()){
             speler2 = new Speler(tempSpelerNaam2, 1);
@@ -72,12 +73,12 @@ public class SpelController {
         System.out.println(speler2);
 
         spel.newGame(speler1, speler2, Randomplacement);
-        //spel.doGame();
-        spel.saveGame(spelDataService, spelerDataService, speelStukDataService);
+        spel.doGame();
+        //spel.saveGame(spelDataService, spelerDataService, speelStukDataService);
     }
 
     @GetMapping("/bordprinten")
-    public FrontEndGameData getBord() {
+    public List<SpeelStukData> getBord() {
         Object[][] speelbord = spel.getSpelBord().getSpeelBord();
         List<SpeelStukData> speelStukken = new ArrayList<>();
         for (int y = 0; y < 10; y++) {
@@ -94,7 +95,6 @@ public class SpelController {
                 }
             }
         }
-        frontEndGameData.setAll(speelStukken, spel.getTurn(), spel.getGameRunnig());
-        return frontEndGameData;
+        return speelStukken;
     }
 }

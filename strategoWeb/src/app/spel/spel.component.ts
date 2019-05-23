@@ -26,24 +26,26 @@ export class SpelComponent implements OnInit {
   kiezenxcoordinate
   kiezenycoordinate
   huidigespeler
+  team
+  running
 
   onClickNaarBoven(){
-    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/u/"+this.huidigespeler
+    this.beurtURL = "http://localhost:8080/beurt/"+(this.kiezenxcoordinate-1)+"/"+(this.kiezenycoordinate-1)+"/u/"+this.huidigespeler
     this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
   }
 
   onClickNaarBeneden(){
-    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/d/"+this.huidigespeler
+    this.beurtURL = "http://localhost:8080/beurt/"+(this.kiezenxcoordinate-1)+"/"+(this.kiezenycoordinate-1)+"/d/"+this.huidigespeler
     this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
   }
 
   onClickNaarLinks(){
-    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/l/"+this.huidigespeler
+    this.beurtURL = "http://localhost:8080/beurt/"+(this.kiezenxcoordinate-1)+"/"+(this.kiezenycoordinate-1)+"/l/"+this.huidigespeler
     this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
   }
 
   onClickNaarRechts(){
-    this.beurtURL = "http://localhost:8080/beurt/"+this.kiezenxcoordinate+"/"+this.kiezenycoordinate+"/r/"+this.huidigespeler
+    this.beurtURL = "http://localhost:8080/beurt/"+(this.kiezenxcoordinate-1)+"/"+(this.kiezenycoordinate-1)+"/r/"+this.huidigespeler
     this.spelService.getBeurt(this.beurtURL).subscribe(() => this.onClickBord())
   }
 
@@ -55,7 +57,9 @@ export class SpelComponent implements OnInit {
 
   onClickBord(){
     this.spelService.getBord().subscribe(speelStukken => {
-      this.speelStukken = speelStukken;
+      console.log("Ik ben in printen bord")
+      this.speelStukken = speelStukken
+
       this.fillBord();
     })
   }
